@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAA エッセンスノート</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+  :root{--bg:#0a0c10;--surface:#111520;--card:#161b27;--border:#252d40;--orange:#ff6b2b;--orange-dim:#c44d16;--yellow:#f5c842;--green:#3dd68c;--red:#ff4757;--blue:#4fc3f7;--purple:#a78bfa;--text:#e8eaf0;--muted:#7a85a0;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;}
+  .header{background:linear-gradient(135deg,#0d1117,#161b27);border-bottom:2px solid var(--purple);padding:14px 16px;position:sticky;top:0;z-index:100;}
+  .header-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .logo{background:var(--purple);color:#0a0c10;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11px;padding:3px 8px;border-radius:4px;letter-spacing:1px;}
+  .header h1{font-size:16px;font-weight:900;color:white;}
+  .header-sub{font-size:10px;color:var(--purple);font-family:'JetBrains Mono',monospace;}
+  .tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{flex-shrink:0;padding:5px 11px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;border:none;background:var(--border);color:var(--muted);transition:all .2s;font-family:'Noto Sans JP',sans-serif;}
+  .tab.active{background:var(--purple);color:#0a0c10;}
+  .content{padding:14px;max-width:620px;margin:0 auto;}
+  .section{display:none;}.section.active{display:block;}
+  @keyframes si{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+  .section.active .card{animation:si .25s ease forwards;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px;}
+  .card-header{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+  .card-title{font-size:13px;font-weight:700;color:white;}
+  .badge{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10px;padding:2px 7px;border-radius:4px;background:rgba(167,139,250,.15);color:var(--purple);border:1px solid rgba(167,139,250,.3);}
+
+  .tbl{width:100%;border-collapse:collapse;font-size:12px;}
+  .tbl th{background:rgba(167,139,250,.12);color:var(--purple);font-weight:700;padding:6px 8px;text-align:left;border-bottom:1px solid var(--border);font-size:10px;}
+  .tbl td{padding:6px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+  .tbl tr:last-child td{border-bottom:none;}
+
+  .kw{display:inline-block;background:rgba(79,195,247,.15);color:var(--blue);border:1px solid rgba(79,195,247,.3);border-radius:4px;padding:1px 6px;font-size:10px;font-weight:700;margin:2px 2px 2px 0;font-family:'JetBrains Mono',monospace;}
+  .kg{background:rgba(61,214,140,.15);color:var(--green);border-color:rgba(61,214,140,.3);}
+  .kr{background:rgba(255,71,87,.15);color:var(--red);border-color:rgba(255,71,87,.3);}
+  .ky{background:rgba(245,200,66,.15);color:var(--yellow);border-color:rgba(245,200,66,.3);}
+  .kp{background:rgba(167,139,250,.15);color:var(--purple);border-color:rgba(167,139,250,.3);}
+
+  .qa{background:var(--surface);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:9px 11px;margin-bottom:7px;}
+  .qa-q{color:var(--muted);font-size:11px;margin-bottom:4px;}
+  .qa-a{font-weight:700;color:var(--green);font-size:12px;}
+  .qa.bl{border-left-color:var(--blue);}.qa.bl .qa-a{color:var(--blue);}
+  .qa.re{border-left-color:var(--red);}.qa.re .qa-a{color:var(--red);}
+
+  .rule-list{list-style:none;}
+  .rule-list li{padding:6px 0 6px 20px;position:relative;font-size:12px;border-bottom:1px solid var(--border);}
+  .rule-list li:last-child{border-bottom:none;}
+  .rule-list li::before{content:"▸";position:absolute;left:0;color:var(--orange);font-weight:700;}
+
+  .mnemo{background:rgba(255,107,43,.06);border:1px dashed var(--orange-dim);border-radius:8px;padding:8px 12px;margin-top:8px;font-size:11px;}
+  .mnemo-lbl{font-size:9px;color:var(--orange);font-weight:700;letter-spacing:1px;margin-bottom:3px;font-family:'JetBrains Mono',monospace;}
+  .mnemo-txt{color:var(--yellow);font-weight:700;font-size:12px;line-height:1.6;}
+
+  .footer{text-align:center;padding:18px 16px;color:var(--muted);font-size:10px;font-family:'JetBrains Mono',monospace;border-top:1px solid var(--border);margin-top:18px;}
+  .footer .cheer{font-size:14px;color:var(--purple);font-weight:700;font-family:'Noto Sans JP',sans-serif;display:block;margin-bottom:3px;}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-top">
+    <div class="logo">AWS SAA</div>
+    <div>
+      <h1>エッセンスノート</h1>
+      <div class="header-sub">▶ 直前用｜論点別に凝縮（分野1〜4 / 73問分・全分野収録）</div>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="st(0)">全体サマリー</button>
+    <button class="tab" onclick="st(1)">IAM・権限管理</button>
+    <button class="tab" onclick="st(2)">S3セキュリティ</button>
+    <button class="tab" onclick="st(3)">DB可用性・移行</button>
+    <button class="tab" onclick="st(4)">ネットワーク</button>
+    <button class="tab" onclick="st(5)">サーバーレス取込</button>
+    <button class="tab" onclick="st(6)">共有ストレージ</button>
+    <button class="tab" onclick="st(7)">EBS性能・キャッシュ</button>
+    <button class="tab" onclick="st(8)">配信・移行・監視</button>
+    <button class="tab" onclick="st(9)">コスト最適化(ストレージ)</button>
+    <button class="tab" onclick="st(10)">コスト最適化(コンピュート)</button>
+    <button class="tab" onclick="st(11)">移行・特殊DB構成</button>
+    <button class="tab" onclick="st(12)">組織統制・特殊アクセス</button>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ===== TAB0: 全体サマリー ===== -->
+<div class="section active" id="s0">
+  <div class="card">
+    <div class="card-header"><span class="card-title">🎯 SAA判定の黄金ルール（全分野共通）</span></div>
+    <table class="tbl">
+      <tr><th>問題文のキーワード</th><th>即座に選ぶべき方向性</th></tr>
+      <tr><td><span class="kw ky">運用オーバーヘッド/管理負担を最小</span></td><td>自前構築・EC2・カスタムコードを<strong style="color:var(--red)">即除外</strong> → <strong style="color:var(--green)">マネージド/サーバーレス/ネイティブ機能</strong></td></tr>
+      <tr><td><span class="kw kr">アプリコードの変更を避けたい</span></td><td>接続先だけ変える系（RDS Proxy等）を優先</td></tr>
+      <tr><td><span class="kw kp">予測不能なタイミング</span></td><td>スケジュール/予測系を除外 → <strong style="color:var(--green)">動的（リアルタイム）</strong></td></tr>
+      <tr><td><span class="kw kg">RTO/RPOをともに最小化</span></td><td>バックアップ/DMS/非同期レプリカを除外 → <strong style="color:var(--green)">Global Database系（同期レプリケーション）</strong></td></tr>
+      <tr><td><span class="kw">共通ユーザー/アクセスキー共有</span></td><td>SAAでは<strong style="color:var(--red)">ほぼ100%不正解</strong></td></tr>
+      <tr><td><span class="kw kr">ルートユーザーも含め削除不可</span></td><td>ガバナンスモード/バケットポリシー✗ → <strong style="color:var(--green)">コンプライアンスモード</strong>必須</td></tr>
+      <tr><td><span class="kw kp">AZ障害時も他AZに影響させない</span></td><td>単一リソースへの集約は✗ → <strong style="color:var(--green)">AZごとに複製配置</strong></td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">📊 分野別 頻出サービス早見表</span></div>
+    <table class="tbl">
+      <tr><th>分野</th><th>頻出パターン</th></tr>
+      <tr><td>分野1<br>セキュア設計</td><td><span class="kw kp">IAMロール+AssumeRole</span><span class="kw kg">Object Lock</span><span class="kw ky">SCP</span><span class="kw">Session Manager</span></td></tr>
+      <tr><td>分野2<br>弾力性設計</td><td><span class="kw kp">Aurora Global DB</span><span class="kw kg">RDS Proxy</span><span class="kw ky">動的スケーリング</span><span class="kw">EFS</span><span class="kw kr">Data Firehose</span></td></tr>
+    </table>
+  </div>
+
+  <div class="mnemo">
+    <div class="mnemo-lbl">🧠 迷ったときの2ステップ思考</div>
+    <div class="mnemo-txt">① この選択肢は「自前構築」か「マネージド」か → マネージド優先<br>② 要件（RTO/RPO/ダウンタイム/整合性）を満たせない理由を一言で言えるか確認</div>
+  </div>
+</div>
+
+<!-- ===== TAB1: IAM・権限管理 ===== -->
+<div class="section" id="s1">
+  <div class="card">
+    <div class="card-header"><span class="card-title">クロスアカウント・最小権限の黄金パターン</span></div>
+    <div class="qa">
+      <div class="qa-q">社内エンジニア/他アカウントに必要最小限の権限で作業させたい</div>
+      <div class="qa-a">→ IAMロール作成 + STS AssumeRole（一時認証情報）</div>
+    </div>
+    <table class="tbl">
+      <tr><th>選択肢</th><th>不正解になる理由</th></tr>
+      <tr><td>Cognito IDプール</td><td>エンドユーザー向け認証。社内運用者には設計思想外</td></tr>
+      <tr><td>共通IAMユーザー</td><td>監査証跡が取れない（常に不正解）</td></tr>
+      <tr><td>Admin付与+事後検出</td><td>事前防止できずリスク大</td></tr>
+      <tr><td>PowerUserAccess付与</td><td>自アカウント内の権限強化のみ。他アカウントには無関係</td></tr>
+      <tr><td>ワイルドカード(*)プリンシパル</td><td>全世界に公開されてしまう</td></tr>
+    </table>
+    <div class="mnemo"><div class="mnemo-lbl">🧠 覚え方</div><div class="mnemo-txt">クロスアカウント問題は「信頼ポリシー（Bが許可）」＋「IAMポリシー（Aがsts:AssumeRole許可）」の2点セットが揃っているかを確認</div></div>
+    <div class="qa bl" style="margin-top:8px;">
+      <div class="qa-q">クロスアカウントでSNSからLambdaを直接トリガーしたい（2つ選択の定番）</div>
+      <div class="qa-a">→ ① SNS側トピックポリシーでサブスクライブ許可 ＋ ② Lambda側リソースベースポリシーでSNSからのInvoke許可（双方向設定）</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">組織全体への強制はSCP</span></div>
+    <div class="qa bl">
+      <div class="qa-q">全アカウント・ルートユーザー含めてルールを強制したい（例: EBS暗号化必須）</div>
+      <div class="qa-a">→ デフォルト暗号化（作業側の手間ゼロ）＋ SCP（予防的ガードレール）</div>
+    </div>
+    <ul class="rule-list">
+      <li>IAMポリシーだけでは<strong style="color:var(--red)">ルートユーザーの操作を制限できない</strong></li>
+      <li>Config等の事後検出＋自動削除は「一瞬でも違反状態が存在する」ため不正解になりやすい</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">EC2への安全なアクセス・ログ／マルチアカウント管理</span></div>
+    <div class="qa">
+      <div class="qa-q">SSHキー/踏み台なしでEC2に安全に接続・ログを残したい</div>
+      <div class="qa-a">→ Systems Manager Session Manager（SSMエージェント + IAM制御）</div>
+    </div>
+    <div class="qa bl">
+      <div class="qa-q">複数AWSアカウントへのコンソールアクセスを一元管理したい</div>
+      <div class="qa-a">→ IAM Identity Center（フェデレーション認証）とSession Managerを組み合わせる</div>
+    </div>
+    <div class="mnemo"><div class="mnemo-lbl">🧠 覚え方</div><div class="mnemo-txt">「セッションログを保存したい」も「安全に接続したい」も答えは同じSession Manager。設定画面のポチだけで完結するのが目印。アカウントごとの個別IAMユーザー管理は煩雑化するため不正解になりやすい</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">KMSカスタマーマネージドキー</span></div>
+    <div class="qa kp">
+      <div class="qa-q">Lambda等がカスタマーマネージドキーで復号する権限を与えたい</div>
+      <div class="qa-a">→ ① IAM実行ロールにkms:Decrypt許可 ＋ ② KMSキーポリシーで実行ロールを許可（2つ選択の定番）</div>
+    </div>
+    <ul class="rule-list">
+      <li>SGのアウトバウンド設定は「ネットワーク到達性」の話。IAM認可とは無関係</li>
+      <li>リソースベースポリシーは「外部→Lambda」の方向。「Lambda→KMS」の逆方向には無関係</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">ポリシーのアタッチ先・対応表</span></div>
+    <table class="tbl">
+      <tr><th>ポリシー種別</th><th>アタッチ先</th></tr>
+      <tr><td>アイデンティティベースポリシー</td><td>IAMユーザー/グループ/ロールのみ</td></tr>
+      <tr><td>リソースベースポリシー</td><td>S3/SQS等の対応リソース側（<span class="kw kr">DynamoDBは非対応</span>）</td></tr>
+      <tr><td>SCP</td><td>OU/アカウント（組織単位）</td></tr>
+    </table>
+    <div class="mnemo"><div class="mnemo-lbl">🧠 覚え方</div><div class="mnemo-txt">DynamoDBへのアクセス許可は必ず「実行ロール」経由。「DynamoDBのリソースポリシーで許可」という選択肢は存在しない罠</div></div>
+  </div>
+</div>
+
+<!-- ===== TAB2: S3セキュリティ ===== -->
+<div class="section" id="s2">
+  <div class="card">
+    <div class="card-header"><span class="card-title">プライベートコンテンツ配信の使い分け</span></div>
+    <table class="tbl">
+      <tr><th>状況</th><th>正解</th></tr>
+      <tr><td>単一のメディアファイル（購入者限定）</td><td><span class="kw kg">署名付きURL</span></td></tr>
+      <tr><td>複数セグメントファイル群（HLS等）</td><td><span class="kw kp">署名付きCookie</span></td></tr>
+      <tr><td>S3直接アクセスを防ぎCloudFront経由を強制したいだけ</td><td><span class="kw">OAC</span>（個別の購入判定は不可）</td></tr>
+      <tr><td>特定オフィス等の固定IPから一括制限</td><td><span class="kw ky">WAF IPセット</span></td></tr>
+      <tr><td>国単位でのアクセス制限</td><td><span class="kw kg">CloudFrontジオリストリクション</span>（追加料金なし）</td></tr>
+      <tr><td>有料プラン契約者のみAPIアクセスを許可（管理最小）</td><td><span class="kw kp">API Gateway 使用量プラン＋APIキー</span></td></tr>
+    </table>
+    <div class="mnemo"><div class="mnemo-lbl">🧠 覚え方</div><div class="mnemo-txt">「単一ファイル→URL」「複数ファイル→Cookie」。OACは経路強制だけで認可判定はしない。API単位の契約者制御はLambdaオーソライザー自作より先に使用量プランを検討</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">削除禁止要件は Object Lock 一択</span></div>
+    <div class="qa re">
+      <div class="qa-q">ルートユーザーを含め、いかなるユーザーもオブジェクトを削除できない状態にしたい</div>
+      <div class="qa-a">→ Object Lock「コンプライアンスモード」（ガバナンスモードやバケットポリシーはルート削除を防げない）</div>
+    </div>
+    <ul class="rule-list">
+      <li>初年度アクセスが必要 → S3標準に格納→期間後にライフサイクルでGlacier Deep Archiveへ移行</li>
+      <li>Glacierへの最初からの格納は「即時アクセス不可」でNGになりやすい</li>
+      <li>既存の大量オブジェクトへの一括適用は個別CLIではなく<strong style="color:var(--green)">S3バッチオペレーション</strong>を使う</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">パブリックアクセスの根絶は「予防的コンボ」で</span></div>
+    <div class="qa re">
+      <div class="qa-q">全バケットの公開を一括禁止し、設定変更自体もできないようにしたい</div>
+      <div class="qa-a">→ S3 Block Public Access（アカウントレベル）＋ SCPでその設定変更操作自体を拒否</div>
+    </div>
+    <ul class="rule-list">
+      <li>Config/Macie等の「検出→Lambda等で自動修復」は事後対応（検出的制御）であり、検知までのタイムラグで一瞬公開されるリスクが残る</li>
+      <li>「制限を解除できないように」という表現は、権限自体を奪う<strong style="color:var(--green)">SCP</strong>とセットで考える</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">暗号化の強制 = 予防的制御</span></div>
+    <div class="qa">
+      <div class="qa-q">アップロード時にサーバーサイド暗号化(SSE)を必須にしたい</div>
+      <div class="qa-a">→ バケットポリシーで s3:x-amz-server-side-encryption 条件キーを評価しPutObjectを拒否</div>
+    </div>
+    <table class="tbl">
+      <tr><th>混同しやすい選択肢</th><th>実際の意味</th></tr>
+      <tr><td>aws:SecureTransport</td><td>転送中暗号化（HTTPS強制）。保存時暗号化とは無関係</td></tr>
+      <tr><td>s3:x-amz-acl</td><td>アクセス権限（認可）の制御。暗号化とは無関係</td></tr>
+      <tr><td>CloudTrail+Lambda自動削除</td><td>事後検出。一瞬でも非暗号化状態が存在してしまう</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ===== TAB3: DB可用性・移行 ===== -->
+<div class="section" id="s3">
+  <div class="card">
+    <div class="card-header"><span class="card-title">RDS/Auroraのダウンタイム最小化シーン別対応表</span></div>
+    <table class="tbl">
+      <tr><th>やりたいこと</th><th>正解</th><th>ポイント</th></tr>
+      <tr><td>メジャーバージョンUP（整合性維持）</td><td><span class="kw kg">ブルー/グリーンデプロイ</span></td><td>自動バイナリログ同期、1分未満ダウンタイム</td></tr>
+      <tr><td>フェイルオーバー時の接続断を最小化</td><td><span class="kw kp">RDS Proxy</span></td><td>アプリのDNSキャッシュ問題を透過的に吸収、コード変更不要</td></tr>
+      <tr><td>リージョン障害に備えRTO/RPOを最小化</td><td><span class="kw ky">Aurora Global Database</span></td><td>ストレージ層レプリケーション、RPO約1秒/RTO約1分</td></tr>
+      <tr><td>読み取りをスケールしたい</td><td><span class="kw">Auroraリードレプリカ+リーダーエンドポイント</span></td><td>最大15レプリカへ自動分散</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">よくある不正解パターン（DB系）</span></div>
+    <ul class="rule-list">
+      <li><strong style="color:var(--red)">リードレプリカを昇格</strong>させる方式 → 昇格した瞬間に本番との同期が切れる</li>
+      <li><strong style="color:var(--red)">PITR（ポイントインタイムリカバリ）</strong> → 復元時点で固定、その後の同期は追従しない</li>
+      <li><strong style="color:var(--red)">DAX</strong> → DynamoDB専用。Auroraには技術的に使えない</li>
+      <li><strong style="color:var(--red)">クロスリージョンリードレプリカ（binlogベース）</strong> → Global DBよりRTO/RPOが劣る</li>
+      <li><strong style="color:var(--red)">バックアップ復元方式</strong> → 新規作成に数十分、データ損失も発生</li>
+      <li><strong style="color:var(--red)">RDSマルチAZのスタンバイに読取分散</strong> → スタンバイは技術的に読取処理不可</li>
+      <li><strong style="color:var(--red)">DMS継続的レプリケーション</strong> → アプリ層同期で遅延・複雑性増（異機種間移行なら正解）</li>
+    </ul>
+  </div>
+
+  <div class="mnemo">
+    <div class="mnemo-lbl">🧠 判断フロー</div>
+    <div class="mnemo-txt">「ダウンタイム最小×バージョンUP」→ブルーグリーン／「フェイルオーバー×アプリ変更なし」→RDS Proxy／「DR×RTO/RPO最小」→Global DB／「読取スケール」→リードレプリカ</div>
+  </div>
+</div>
+
+<!-- ===== TAB4: ネットワーク ===== -->
+<div class="section" id="s4">
+  <div class="card">
+    <div class="card-header"><span class="card-title">Auto Scaling: 負荷パターンで即判定</span></div>
+    <table class="tbl">
+      <tr><th>負荷の性質</th><th>正解</th></tr>
+      <tr><td><span class="kw kr">予測不能・突発的</span></td><td>動的スケーリング（CloudWatchメトリクス/ターゲット追跡）</td></tr>
+      <tr><td>時刻が事前に確定（始業時等）</td><td>スケジュールスケーリング</td></tr>
+      <tr><td>週/日周期があり<span class="kw ky">事前準備（N分前）</span>も必要</td><td>予測スケーリング（機械学習）＋事前起動設定</td></tr>
+    </table>
+    <div class="mnemo"><div class="mnemo-lbl">🧠 補強（分野4で再登場）</div><div class="mnemo-txt">「周期性＋開始◯分前に準備」ときたらターゲット追跡（リアクティブ）では間に合わない。予測スケーリングの事前起動設定が正解</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">NAT Gatewayは1AZ1個が鉄則</span></div>
+    <div class="qa bl">
+      <div class="qa-q">AZ障害が発生しても他のAZのインターネット通信に影響を与えたくない</div>
+      <div class="qa-a">→ 各AZのパブリックサブネットにNAT GWを1つずつ配置し、同AZのプライベートサブネットから参照</div>
+    </div>
+    <ul class="rule-list">
+      <li>1つのNAT GWに集約 → そのAZ障害で全AZが道連れ（SPOF）</li>
+      <li>NATインスタンスをプライベートサブネットに置く → IGWと通信できず機能しない</li>
+      <li>Egress-Only IGW → <strong style="color:var(--green)">IPv6専用のアウトバウンド通信</strong>。IPv4のNAT Gatewayに相当する存在</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">SG・ネットワークアクセス制御</span></div>
+    <table class="tbl">
+      <tr><th>要件</th><th>正解</th></tr>
+      <tr><td>特定インスタンスからのみDB接続を許可</td><td>SGのID相互参照（IPやCIDRではなくSG ID指定）</td></tr>
+      <tr><td>特定SG以外を拒否したい</td><td><span class="kw kr">不可能</span>（SGに拒否ルールは存在しない）</td></tr>
+      <tr><td>国別にアクセス制限</td><td>CloudFrontジオリストリクション（追加料金なし）</td></tr>
+      <tr><td>3層構成のSG設計</td><td>各層は<span class="kw kg">直前の層のSG ID</span>のみを送信元に許可（応答はステートフルで自動許可）</td></tr>
+      <tr><td>VPCからS3への閉域アクセス</td><td><span class="kw kp">ゲートウェイ型VPCエンドポイント</span>（無料・インターネット非経由）</td></tr>
+      <tr><td>クロスリージョンVPC間の接続制御</td><td><span class="kw ky">CIDR指定必須</span>（SG ID参照は同一リージョン限定）</td></tr>
+      <tr><td>悪意あるIPを即座にブロック</td><td><span class="kw kr">NACL</span>（拒否ルール対応。SGは不可）</td></tr>
+      <tr><td>固定IP＋WAF保護＋低遅延を同時要求</td><td><span class="kw kg">Global Accelerator＋ALB＋WAF</span>（CloudFrontは固定IP不可、NLBはWAF不可）</td></tr>
+      <tr><td>VPCからSQS/SNS等（S3/DynamoDB以外）への閉域接続</td><td><span class="kw kp">インターフェイス型VPCエンドポイント</span>（PrivateLink）</td></tr>
+      <tr><td>サードパーティSaaSへの閉域接続</td><td><span class="kw">PrivateLink</span>（TGW/VPNは過剰）</td></tr>
+    </table>
+    <div class="mnemo"><div class="mnemo-lbl">🧠 覚え方</div><div class="mnemo-txt">SGは「許可のみ」＝ホワイトリスト方式。拒否ルールを求める選択肢は罠。クロスリージョンでは「SG ID参照」ができない点も要注意（IP/CIDR指定に切り替える）</div></div>
+  </div>
+</div>
+
+<!-- ===== TAB5: サーバーレス取込 ===== -->
+<div class="section" id="s5">
+  <div class="card">
+    <div class="card-header"><span class="card-title">データ取り込み・イベント駆動の定番構成</span></div>
+    <table class="tbl">
+      <tr><th>要件</th><th>正解</th></tr>
+      <tr><td>IoT/GPS等のストリームをS3へ蓄積（変換不要）</td><td><span class="kw kg">Data Firehose</span></td></tr>
+      <tr><td>ファイル受信後すぐに変換処理したい</td><td><span class="kw kp">Transfer Family + S3イベント通知 + Lambda</span></td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">過剰設計になりがちな不正解パターン</span></div>
+    <ul class="rule-list">
+      <li><strong style="color:var(--red)">Glue ETLジョブ</strong> → データ変換が不要ならジョブ管理は過剰</li>
+      <li><strong style="color:var(--red)">MSK（Kafka）</strong> → クラスター管理の運用負荷が高すぎる（既存Kafka資産があれば正解）</li>
+      <li><strong style="color:var(--red)">EC2+Fluentd等の自前構成</strong> → OS管理・パッチ・監視が発生する時点でほぼ不正解</li>
+      <li><strong style="color:var(--red)">スケジュール実行（15分/1時間ごと）</strong> → 「すぐに処理」という即時性要件と矛盾</li>
+      <li><strong style="color:var(--red)">SQS+EC2ワーカー</strong> → Lambdaの制限時間(15分)を超える処理や大量バッファリングが必要な場合のみ正解</li>
+    </ul>
+  </div>
+
+  <div class="mnemo">
+    <div class="mnemo-lbl">🧠 覚え方</div>
+    <div class="mnemo-txt">「サーバー管理ゼロ」×「変換不要」→Data Firehose／「即時イベント駆動」→S3通知+Lambda。管理コンポーネントが増えるほど不正解に近づく</div>
+  </div>
+</div>
+
+<!-- ===== TAB6: 共有ストレージ ===== -->
+<div class="section" id="s6">
+  <div class="card">
+    <div class="card-header"><span class="card-title">OSで即判定：共有ファイルシステム</span></div>
+    <table class="tbl">
+      <tr><th>接続元OS/要件</th><th>正解</th></tr>
+      <tr><td>Linux・複数AZ・複数インスタンス共有</td><td><span class="kw kg">EFS（NFS）</span></td></tr>
+      <tr><td>Windows Server・AD連携</td><td><span class="kw kp">FSx for Windows File Server（SMB）</span></td></tr>
+      <tr><td>同一AZ内の高性能クラスタリングのみ</td><td>EBS io2マルチアタッチ</td></tr>
+      <tr><td>大量の静的ファイル、POSIX互換は不要</td><td>S3（s3fs-fuseは非推奨扱い）</td></tr>
+    </table>
+    <div class="mnemo"><div class="mnemo-lbl">🧠 覚え方</div><div class="mnemo-txt">「NFS」と出たら即EFS。「SMB」と出たら即FSx for Windows。EBSマルチアタッチは"同一AZ限定"が弱点</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">よくある取り違えの理由</span></div>
+    <ul class="rule-list">
+      <li>EFSをWindowsで使おうとする選択肢 → NFSはWindowsにネイティブ非対応</li>
+      <li>EBSマルチアタッチで複数AZ共有しようとする選択肢 → 同一AZ限定という制約を見落とす</li>
+      <li>S3を「共有ファイルシステム」として使う選択肢 → オブジェクトストレージでPOSIX非互換</li>
+      <li>EC2+Samba/Storage Gatewayでの自前SMB構築 → 運用負荷最小の要件に反する（FSxが正解の定番）</li>
+    </ul>
+    <div class="mnemo"><div class="mnemo-lbl">🧠 再確認（分野3で再登場）</div><div class="mnemo-txt">「Windows＋SMB＋運用負荷最小」は分野を跨いで繰り返し出る定番パターン。迷わずFSx for Windows File Server</div></div>
+  </div>
+</div>
+
+<!-- ===== TAB7: EBS性能・キャッシュ ===== -->
+<div class="section" id="s7">
+  <div class="card">
+    <div class="card-header"><span class="card-title">EBS/AMIの性能問題：原因別の正解</span></div>
+    <table class="tbl">
+      <tr><th>状況</th><th>正解</th><th>理由</th></tr>
+      <tr><td>大容量AMIからの<span class="kw kr">起動時</span>にディスクが遅い</td><td><span class="kw kg">高速スナップショット復元(FSR)</span></td><td>lazy loading（S3遅延読込）を事前初期化で解消</td></tr>
+      <tr><td><span class="kw kr">稼働中</span>に単一ボリュームの性能上限に到達</td><td><span class="kw kp">複数io1でRAID 0ストライピング</span></td><td>OS側で並列化し単一ボリューム限界を突破</td></tr>
+    </table>
+    <div class="mnemo"><div class="mnemo-lbl">🧠 覚え方</div><div class="mnemo-txt">「もっと良いボリュームタイプに変える」「容量を増やす」だけの選択肢は根本原因を解決しないひっかけ。EBSの弱点は「初回アクセス」と「単一ボリューム上限」の2種類と覚える</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">キャッシュ選定：DBの種類で即判定</span></div>
+    <table class="tbl">
+      <tr><th>DB/要件</th><th>正解</th></tr>
+      <tr><td>DynamoDB＋マイクロ秒化＋コード変更最小</td><td><span class="kw kg">DAX</span>（API互換で透過的）</td></tr>
+      <tr><td>Aurora/RDS等リレーショナルDBのキャッシュ</td><td><span class="kw kp">ElastiCache</span>（自前ロジック必要）</td></tr>
+      <tr><td>複数の異なるデータソースを柔軟にキャッシュ</td><td><span class="kw ky">ElastiCache</span></td></tr>
+    </table>
+    <div class="mnemo"><div class="mnemo-lbl">🧠 覚え方</div><div class="mnemo-txt">DAXは「DynamoDB専用・コード変更ほぼ不要」。ElastiCacheは「汎用・自前実装が必要」で棲み分ける</div></div>
+  </div>
+</div>
+
+<!-- ===== TAB8: 配信・移行・監視 ===== -->
+<div class="section" id="s8">
+  <div class="card">
+    <div class="card-header"><span class="card-title">配信・ネットワークの使い分け</span></div>
+    <table class="tbl">
+      <tr><th>要件</th><th>正解</th><th>除外される選択肢</th></tr>
+      <tr><td>PB規模の静的コンテンツを世界に配信</td><td><span class="kw kg">S3 + CloudFront</span></td><td>EFS(高コスト)・EBS(容量上限)</td></tr>
+      <tr><td>TCP/UDP両方を使うリアルタイム通信の低遅延化</td><td><span class="kw kp">Global Accelerator</span></td><td>CloudFront/API Gateway/ALB（すべてHTTP専用）</td></tr>
+      <tr><td>クライアントから直接S3へ大量アップロード</td><td><span class="kw ky">S3署名付きURL</span></td><td>中継サーバー方式全般（ボトルネック化）</td></tr>
+    </table>
+    <div class="mnemo"><div class="mnemo-lbl">🧠 覚え方</div><div class="mnemo-txt">「HTTP/HTTPSのみ」→CloudFront系。「TCP/UDPも含む低レイヤー」→Global Accelerator。この線引きが最速の判定軸</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">大容量データ移行：帯域と期限で判定</span></div>
+    <div class="qa">
+      <div class="qa-q">帯域制限が厳しく期限も短い中で大容量データをS3へ移行したい</div>
+      <div class="qa-a">→ 実効スループットを計算し、間に合わなければ AWS Snowball（物理輸送）</div>
+    </div>
+    <ul class="rule-list">
+      <li>Direct Connectは開通に数週間〜数ヶ月かかり短期の移行には不向き</li>
+      <li>DataSync/Transfer Accelerationは「オンプレ拠点側の物理回線の細さ」自体は解決できない</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">監視・可視化はまず標準機能を疑う</span></div>
+    <table class="tbl">
+      <tr><th>要件</th><th>正解</th></tr>
+      <tr><td>EC2の1分間隔メトリクス取得</td><td><span class="kw kg">CloudWatch詳細モニタリング</span>（設定だけで完結）</td></tr>
+      <tr><td>複数アカウントの構成・依存関係を自動可視化</td><td><span class="kw kp">Workload Discovery on AWS</span></td></tr>
+    </table>
+    <div class="mnemo"><div class="mnemo-lbl">🧠 覚え方</div><div class="mnemo-txt">複数サービスを組み合わせた自前パイプライン（エージェント+Firehose+OpenSearch等）は、標準機能で足りる要件に対しては大抵オーバーエンジニアリングで不正解</div></div>
+  </div>
+</div>
+
+<!-- ===== TAB9: コスト最適化(ストレージ) ===== -->
+<div class="section" id="s9">
+  <div class="card">
+    <div class="card-header"><span class="card-title">S3階層化：アクセスパターンで即判定</span></div>
+    <table class="tbl">
+      <tr><th>アクセスパターン</th><th>正解</th></tr>
+      <tr><td><span class="kw kr">混在・予測不能</span></td><td><span class="kw kg">Intelligent-Tiering</span>（自動階層移動、取得料金なし）</td></tr>
+      <tr><td>スケジュールが事前に把握できる（低頻度）</td><td><span class="kw kp">Glacier Flexible/Deep Archive</span>への固定ライフサイクル</td></tr>
+      <tr><td>長期保管・アクセスほぼなし</td><td><span class="kw ky">Glacier Deep Archive</span>（最安）</td></tr>
+    </table>
+    <div class="mnemo"><div class="mnemo-lbl">🧠 覚え方</div><div class="mnemo-txt">「数兆件」「混在」「予測できない」というワードが出たら固定ライフサイクルは即除外。Intelligent-Tieringが正解の合図</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">大容量データ移行：帯域と期限で判定（再確認）</span></div>
+    <div class="qa">
+      <div class="qa-q">データ量÷回線帯域を計算した結果、期限に間に合わない</div>
+      <div class="qa-a">→ Snowball / Snowball Edge（オフライン物理転送）</div>
+    </div>
+    <ul class="rule-list">
+      <li>Direct Connectは開通に数週間〜数ヶ月、短期案件には非対応</li>
+      <li>Transfer AccelerationはAWS内部通信の高速化のみ。拠点側の回線の細さは解決しない</li>
+      <li>移行後の保管先は基本 <span class="kw kg">Glacier Deep Archive</span>（最安）を選ぶのがコスト最適化の定石</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===== TAB10: コスト最適化(コンピュート) ===== -->
+<div class="section" id="s10">
+  <div class="card">
+    <div class="card-header"><span class="card-title">DB課金モデルの選び方</span></div>
+    <table class="tbl">
+      <tr><th>要件</th><th>正解</th></tr>
+      <tr><td>RDB＋トラフィック大きく変動＋従量課金</td><td><span class="kw kg">Aurora Serverless</span></td></tr>
+      <tr><td>OSレベルアクセスが必要なDB移行（少人数運用）</td><td><span class="kw kp">RDS Custom</span></td></tr>
+    </table>
+    <div class="mnemo"><div class="mnemo-lbl">🧠 覚え方</div><div class="mnemo-txt">「OSアクセスが必要」＝EC2と即断しない。マネージド＋OS自由度の両取りにはRDS Customという第三の選択肢がある</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">Savings Plans／イベント駆動処理のコスト最適化</span></div>
+    <table class="tbl">
+      <tr><th>要件</th><th>正解</th></tr>
+      <tr><td>EC2とLambdaなど<span class="kw kr">複数コンピュートサービス</span>を横断して割引</td><td><span class="kw kg">Compute Savings Plans</span></td></tr>
+      <tr><td>短時間・軽量・イベント駆動の処理</td><td><span class="kw kp">Lambda（+SQSでバッファ）</span></td></tr>
+    </table>
+    <ul class="rule-list">
+      <li>EC2 Instance Savings PlansはEC2にしか適用されない（Lambda併用時は不十分）</li>
+      <li>常時稼働のBeanstalk/EC2/起動の重いFargateは「軽量・短時間」処理では基本不正解</li>
+      <li>Lambdaと同一リージョンのリソースに接続する場合、同一プライベートサブネットに置くとレイテンシーが最小化される</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===== TAB11: 移行・特殊DB構成 ===== -->
+<div class="section" id="s11">
+  <div class="card">
+    <div class="card-header"><span class="card-title">既存運用を変えずにクラウド移行</span></div>
+    <div class="qa">
+      <div class="qa-q">既存のテープバックアップ運用手順をそのまま継続したい</div>
+      <div class="qa-a">→ Storage Gateway Tape Gateway（iSCSI VTLで仮想テープとして認識）</div>
+    </div>
+    <div class="mnemo"><div class="mnemo-lbl">🧠 覚え方</div><div class="mnemo-txt">「既存ソフト・運用手順そのまま」＋「〇〇からの脱却」ときたら、既存プロトコル互換のマネージドサービス（Storage Gateway系）を探す</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">複数リソースの一元バックアップ</span></div>
+    <div class="qa bl">
+      <div class="qa-q">複数EC2をクロスリージョンで一元的にバックアップし運用コストを抑えたい</div>
+      <div class="qa-a">→ AWS Backup（バックアップ計画＋クロスリージョンコピールール）</div>
+    </div>
+    <ul class="rule-list">
+      <li>DLM+Lambdaの自前実装、CloudFormation StackSets、DMS常時同期は、いずれも「一元管理・運用コスト最小」の要件では過剰または複雑になり不正解</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===== TAB12: 組織統制・特殊アクセス ===== -->
+<div class="section" id="s12">
+  <div class="card">
+    <div class="card-header"><span class="card-title">組織全体のガバナンス自動化</span></div>
+    <table class="tbl">
+      <tr><th>要件</th><th>正解</th></tr>
+      <tr><td>OU/アカウント変更をリアルタイム検知（最小工数）</td><td><span class="kw kg">Control Tower</span>のドリフト検出</td></tr>
+      <tr><td>チーム別にサービス利用を予防的に制限</td><td><span class="kw kp">SCP</span>（OU単位）</td></tr>
+      <tr><td>タグ変更等の特定API操作を組織全体で事前防止</td><td><span class="kw kp">SCP</span>（Deny条件付き）</td></tr>
+      <tr><td>大規模DDoSでAWS専門チームの支援を受けたい</td><td><span class="kw ky">Shield Advanced</span>（SRT）</td></tr>
+      <tr><td>社内ADと連携した全アカウントへのSSO</td><td><span class="kw kg">Organizations＋IAM Identity Center</span>（Cognitoはアプリ向けで不適）</td></tr>
+      <tr><td>複数アカウントのセキュリティログを標準形式で統合</td><td><span class="kw">Security Lake</span>（OCSF自動正規化）</td></tr>
+    </table>
+    <div class="mnemo"><div class="mnemo-lbl">🧠 覚え方</div><div class="mnemo-txt">「最小工数でリアルタイム」ときたらまずAWS公式のマネージド機能（Control Tower等）を疑う。EventBridge+Lambdaのカスタム構成は大抵不正解。予防的制御は常にSCP、事後検出はConfig/EventBridge系という区別を徹底する</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">攻撃タイプ別セキュリティサービスの使い分け</span></div>
+    <table class="tbl">
+      <tr><th>脅威の種類</th><th>正解サービス</th></tr>
+      <tr><td>DDoS（L3/L4/L7）＋専門チーム支援</td><td><span class="kw kg">Shield Advanced</span></td></tr>
+      <tr><td>SQLインジェクション等L7攻撃</td><td><span class="kw kp">WAF</span></td></tr>
+      <tr><td>不正アクセス・脅威の検出のみ（緩和なし）</td><td><span class="kw">GuardDuty</span></td></tr>
+      <tr><td>OS/ミドルウェアの脆弱性スキャン</td><td><span class="kw ky">Inspector</span></td></tr>
+    </table>
+    <div class="mnemo"><div class="mnemo-lbl">🧠 覚え方</div><div class="mnemo-txt">GuardDuty/Inspectorは「検出のみ」で自動緩和や遮断はしない。実際に攻撃を止めたいならShield AdvancedかWAFを選ぶ</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">コンテナ・ファイルシステムの特殊なIAM連携</span></div>
+    <table class="tbl">
+      <tr><th>要件</th><th>正解</th></tr>
+      <tr><td>EKSでPod単位のAWS API権限を分離</td><td><span class="kw kg">IRSA</span>（OIDCプロバイダー＋サービスアカウントのアノテーション）</td></tr>
+      <tr><td>EKS内部シークレット(etcd)の暗号化</td><td><span class="kw kg">KMSエンベロープ暗号化</span>（組み込み機能）</td></tr>
+      <tr><td>EMRのジョブ単位アクセス制御＋IMDSブロック</td><td><span class="kw kp">EMRランタイムロール</span></td></tr>
+      <tr><td>EFSの書き込み・削除をIAMで防止</td><td>EFSファイルシステムポリシーで<span class="kw kp">elasticfilesystem:ClientWrite</span>をDeny</td></tr>
+    </table>
+    <ul class="rule-list">
+      <li>ワーカーノードのインスタンスプロファイルに権限を持たせると全Podで共有されてしまう（IRSAが必要な理由）</li>
+      <li>クライアント側のマウントオプション（-o ro）やPOSIX権限は回避可能。IAM制御はサーバー側（EFS）のポリシーで行う</li>
+      <li>NACLはリンクローカルアドレス(169.254.169.254=IMDS)を通過するため遮断不可。IMDSブロックはEMRランタイムロール等サービス組み込み機能で行う</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">DB認証情報・暗号化の管理最小化</span></div>
+    <table class="tbl">
+      <tr><th>要件</th><th>正解</th></tr>
+      <tr><td>RDS接続情報の安全管理＋自動ローテーション</td><td><span class="kw kg">Secrets Manager標準機能</span>（自作Lambda/Step Functionsは不要）</td></tr>
+      <tr><td>RDSの保存時＋転送時暗号化（管理負荷最小）</td><td><span class="kw kp">KMS暗号化＋RDS CA証明書(SSL/TLS)</span></td></tr>
+    </table>
+    <div class="mnemo"><div class="mnemo-lbl">🧠 覚え方</div><div class="mnemo-txt">CloudHSMやVPNなど「追加インフラ・自前改修」が必要な選択肢は「管理負荷最小」の要件と相性が悪く、大抵不正解</div></div>
+  </div>
+</div>
+
+</div><!-- /content -->
+<div class="footer">
+  <span class="cheer">🧩 分野1〜4 エッセンス集約完了（73問分・全分野収録）</span>
+  今後は新規問題を解くたびに既存タブへの追記が中心になります
+</div>
+<script>
+  function st(i){
+    document.querySelectorAll('.section').forEach((s,j)=>s.classList.toggle('active',i===j));
+    document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('active',i===j));
+    window.scrollTo({top:document.querySelector('.header').offsetHeight,behavior:'smooth'});
+  }
+</script>
+</body>
+</html>

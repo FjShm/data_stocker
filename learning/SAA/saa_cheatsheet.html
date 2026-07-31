@@ -1,0 +1,2301 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAA 直前速攻シート</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+  :root{--bg:#0a0c10;--surface:#111520;--card:#161b27;--border:#252d40;--orange:#ff6b2b;--orange-dim:#c44d16;--yellow:#f5c842;--green:#3dd68c;--red:#ff4757;--blue:#4fc3f7;--purple:#a78bfa;--text:#e8eaf0;--muted:#7a85a0;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;}
+  .header{background:linear-gradient(135deg,#0d1117,#161b27);border-bottom:2px solid var(--purple);padding:14px 16px;position:sticky;top:0;z-index:100;}
+  .header-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .logo{background:var(--purple);color:#0a0c10;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11px;padding:3px 8px;border-radius:4px;letter-spacing:1px;}
+  .header h1{font-size:17px;font-weight:900;color:white;}
+  .header-sub{font-size:10px;color:var(--purple);font-family:'JetBrains Mono',monospace;}
+  .tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{flex-shrink:0;padding:5px 11px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;border:none;background:var(--border);color:var(--muted);transition:all .2s;font-family:'Noto Sans JP',sans-serif;}
+  .tab.active{background:var(--purple);color:#0a0c10;}
+  .rd{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px;}
+  .content{padding:14px;max-width:640px;margin:0 auto;}
+  .section{display:none;}.section.active{display:block;}
+  @keyframes si{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+  .section.active .qcard{animation:si .25s ease forwards;}
+
+  /* 弱点MAP用 */
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px;}
+  .card-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .card-title{font-size:14px;font-weight:700;color:white;}
+  .idx-row{display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;cursor:pointer;}
+  .idx-row:last-child{border-bottom:none;}
+  .idx-id{font-family:'JetBrains Mono',monospace;color:var(--purple);font-weight:700;flex-shrink:0;font-size:11px;}
+  .idx-text{color:var(--text);}
+  .idx-tag{display:inline-block;background:rgba(255,71,87,.15);color:var(--red);border:1px solid rgba(255,71,87,.3);border-radius:4px;padding:0 5px;font-size:9px;font-weight:700;margin-left:6px;font-family:'JetBrains Mono',monospace;}
+
+  /* 問題カード */
+  .qcard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px;}
+  .qcard-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+  .qid{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11px;color:var(--purple);background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.3);border-radius:4px;padding:2px 7px;}
+  .qtag2{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10px;color:var(--yellow);background:rgba(245,200,66,.12);border:1px solid rgba(245,200,66,.3);border-radius:4px;padding:2px 6px;}
+  .qtheme{font-size:13px;font-weight:700;color:white;flex:1;}
+
+  .ans-block{border-radius:8px;padding:10px 12px;margin-bottom:8px;}
+  .ans-correct{background:rgba(61,214,140,.08);border-left:3px solid var(--green);}
+  .ans-correct .ans-lbl{color:var(--green);}
+  .ans-wrong{background:var(--surface);border-left:3px solid var(--red);}
+  .ans-wrong .ans-lbl{color:var(--red);}
+  .ans-lbl{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.5px;margin-bottom:4px;}
+  .ans-main{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;}
+  .ans-reason{font-size:12px;color:var(--muted);line-height:1.5;}
+  .cond-box{margin-top:6px;background:rgba(79,195,247,.06);border:1px dashed rgba(79,195,247,.3);border-radius:6px;padding:6px 9px;font-size:11px;}
+  .cond-lbl{color:var(--blue);font-weight:700;font-size:9px;font-family:'JetBrains Mono',monospace;margin-right:4px;}
+  .cond-text{color:var(--text);}
+
+  .trap-box{background:rgba(255,107,43,.08);border:1px dashed var(--orange-dim);border-radius:8px;padding:9px 13px;margin-top:8px;font-size:12px;}
+  .trap-lbl{font-size:9px;color:var(--orange);font-weight:700;letter-spacing:1px;margin-bottom:3px;font-family:'JetBrains Mono',monospace;}
+  .trap-text{color:var(--yellow);font-weight:700;font-size:12px;line-height:1.5;}
+
+  .kw{display:inline-block;background:rgba(79,195,247,.15);color:var(--blue);border:1px solid rgba(79,195,247,.3);border-radius:4px;padding:1px 6px;font-size:10px;font-weight:700;margin:2px 2px 2px 0;font-family:'JetBrains Mono',monospace;}
+  .kg{background:rgba(61,214,140,.15);color:var(--green);border-color:rgba(61,214,140,.3);}
+  .kr{background:rgba(255,71,87,.15);color:var(--red);border-color:rgba(255,71,87,.3);}
+  .ky{background:rgba(245,200,66,.15);color:var(--yellow);border-color:rgba(245,200,66,.3);}
+  .kp{background:rgba(167,139,250,.15);color:var(--purple);border-color:rgba(167,139,250,.3);}
+
+  .tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
+  .tbl th{background:rgba(167,139,250,.12);color:var(--purple);font-weight:700;padding:6px 9px;text-align:left;border-bottom:1px solid var(--border);font-size:11px;}
+  .tbl td{padding:6px 9px;border-bottom:1px solid var(--border);}
+  .tbl tr:last-child td{border-bottom:none;}
+
+  .footer{text-align:center;padding:18px 16px;color:var(--muted);font-size:10px;font-family:'JetBrains Mono',monospace;border-top:1px solid var(--border);margin-top:18px;}
+  .footer .cheer{font-size:15px;color:var(--purple);font-weight:700;font-family:'Noto Sans JP',sans-serif;display:block;margin-bottom:3px;}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-top">
+    <div class="logo">AWS SAA</div>
+    <div>
+      <h1>直前速攻シート <span style="color:var(--purple);font-size:12px;">v2</span></h1>
+      <div class="header-sub">▶ 分野1(12+14+17)+分野2(10)+分野3(10)+分野4(10問) 収録</div>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="st(0)"><span class="rd" style="background:#a78bfa"></span>分野1 MAP</button>
+    <button class="tab" onclick="st(1)"><span class="rd" style="background:#a78bfa"></span>IAM・クロスアカウント</button>
+    <button class="tab" onclick="st(2)"><span class="rd" style="background:#a78bfa"></span>S3セキュリティ</button>
+    <button class="tab" onclick="st(3)"><span class="rd" style="background:#a78bfa"></span>暗号化(KMS/EBS)</button>
+    <button class="tab" onclick="st(4)"><span class="rd" style="background:#a78bfa"></span>ログ・監査</button>
+    <button class="tab" onclick="st(5)"><span class="rd" style="background:#a78bfa"></span>ネットワーク制御</button>
+    <button class="tab" onclick="st(6)"><span class="rd" style="background:#4fc3f7"></span>分野2 MAP</button>
+    <button class="tab" onclick="st(7)"><span class="rd" style="background:#4fc3f7"></span>DB可用性・移行</button>
+    <button class="tab" onclick="st(8)"><span class="rd" style="background:#4fc3f7"></span>Auto Scaling・NAT</button>
+    <button class="tab" onclick="st(9)"><span class="rd" style="background:#4fc3f7"></span>ストレージ共有</button>
+    <button class="tab" onclick="st(10)"><span class="rd" style="background:#4fc3f7"></span>サーバーレス取込</button>
+    <button class="tab" onclick="st(11)"><span class="rd" style="background:#3dd68c"></span>分野3 MAP</button>
+    <button class="tab" onclick="st(12)"><span class="rd" style="background:#3dd68c"></span>EBS・ストレージ性能</button>
+    <button class="tab" onclick="st(13)"><span class="rd" style="background:#3dd68c"></span>キャッシュ・DB高速化</button>
+    <button class="tab" onclick="st(14)"><span class="rd" style="background:#3dd68c"></span>配信・ネットワーク</button>
+    <button class="tab" onclick="st(15)"><span class="rd" style="background:#3dd68c"></span>移行・アップロード</button>
+    <button class="tab" onclick="st(16)"><span class="rd" style="background:#3dd68c"></span>監視・可視化・FS</button>
+    <button class="tab" onclick="st(17)"><span class="rd" style="background:#ff6b2b"></span>分野4 MAP</button>
+    <button class="tab" onclick="st(18)"><span class="rd" style="background:#ff6b2b"></span>ストレージ階層化</button>
+    <button class="tab" onclick="st(19)"><span class="rd" style="background:#ff6b2b"></span>コンピュート課金</button>
+    <button class="tab" onclick="st(20)"><span class="rd" style="background:#ff6b2b"></span>イベント駆動処理</button>
+    <button class="tab" onclick="st(21)"><span class="rd" style="background:#ff6b2b"></span>移行・バックアップ</button>
+    <button class="tab" onclick="st(22)"><span class="rd" style="background:#ff6b2b"></span>ASG・DB運用</button>
+    <button class="tab" onclick="st(23)"><span class="rd" style="background:#a78bfa"></span>分野1追加:組織ガバナンス</button>
+    <button class="tab" onclick="st(24)"><span class="rd" style="background:#a78bfa"></span>分野1追加:特殊アクセス制御</button>
+    <button class="tab" onclick="st(26)"><span class="rd" style="background:#a78bfa"></span>分野1追加2:ネットワーク詳細</button>
+    <button class="tab" onclick="st(27)"><span class="rd" style="background:#a78bfa"></span>分野1追加2:監視・SSO</button>
+    <button class="tab" onclick="st(28)"><span class="rd" style="background:#a78bfa"></span>分野1追加2:DB・特殊運用</button>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ===== TAB0: 全体MAP ===== -->
+<div class="section active" id="s0">
+  <div class="card">
+    <div class="card-header"><span class="card-title">📋 12問クイックインデックス</span></div>
+    <div class="idx-row"><div class="idx-id">1003</div><div class="idx-text">最小権限管理 → <strong style="color:var(--green)">IAMロール+AssumeRole</strong><span class="idx-tag">頻出</span></div></div>
+    <div class="idx-row"><div class="idx-id">1004</div><div class="idx-text">購入者限定の動画配信 → <strong style="color:var(--green)">CloudFront署名付きURL</strong></div></div>
+    <div class="idx-row"><div class="idx-id">1005</div><div class="idx-text">医療記録・削除禁止 → <strong style="color:var(--green)">S3 Object Lock コンプライアンスモード</strong><span class="idx-tag">頻出</span></div></div>
+    <div class="idx-row"><div class="idx-id">1006</div><div class="idx-text">セッションログ保存 → <strong style="color:var(--green)">Session Managerネイティブ機能</strong></div></div>
+    <div class="idx-row"><div class="idx-id">1008</div><div class="idx-text">S3暗号化の強制 → <strong style="color:var(--green)">バケットポリシーで条件キー拒否</strong></div></div>
+    <div class="idx-row"><div class="idx-id">1023</div><div class="idx-text">クロスアカウントDynamoDB → <strong style="color:var(--green)">STS AssumeRole</strong></div></div>
+    <div class="idx-row"><div class="idx-id">1024</div><div class="idx-text">EC2への安全な接続 → <strong style="color:var(--green)">Session Manager</strong></div></div>
+    <div class="idx-row"><div class="idx-id">1025</div><div class="idx-text">Lambda環境変数のKMS復号 → <strong style="color:var(--green)">IAM+KMSキーポリシー(2つ選択)</strong><span class="idx-tag">2択</span></div></div>
+    <div class="idx-row"><div class="idx-id">1027</div><div class="idx-text">クロスアカウントS3アクセス → <strong style="color:var(--green)">IAMロール信頼関係+AssumeRole</strong></div></div>
+    <div class="idx-row"><div class="idx-id">1030</div><div class="idx-text">全アカウントEBS暗号化強制 → <strong style="color:var(--green)">デフォルト暗号化+SCP(2つ選択)</strong><span class="idx-tag">2択</span></div></div>
+    <div class="idx-row"><div class="idx-id">1031</div><div class="idx-text">RDS接続元の限定 → <strong style="color:var(--green)">SGのID参照(2つ選択)</strong><span class="idx-tag">2択</span></div></div>
+    <div class="idx-row"><div class="idx-id">1039</div><div class="idx-text">国別の映像配信制限 → <strong style="color:var(--green)">CloudFrontジオリストリクション</strong></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">🎯 この12問から見える鉄則パターン</span></div>
+    <table class="tbl">
+      <tr><th>ひっかけ表現</th><th>反応パターン</th></tr>
+      <tr><td><span class="kw ky">運用オーバーヘッド最小</span></td><td>自前構築・カスタムコード・多段構成を即除外→<strong class="good" style="color:var(--green)">ネイティブ機能</strong>を選ぶ</td></tr>
+      <tr><td><span class="kw kr">共通ユーザー/アクセスキー共有</span></td><td>SAAでは<strong style="color:var(--red)">ほぼ100%不正解</strong>の選択肢</td></tr>
+      <tr><td><span class="kw kp">ルートユーザーも削除不可</span></td><td>ガバナンスモード✗ → <strong style="color:var(--green)">コンプライアンスモード</strong>必須</td></tr>
+      <tr><td><span class="kw kg">保存時暗号化 vs 転送中暗号化</span></td><td>SSE条件キー ≠ SecureTransport（HTTPS）の混同に注意</td></tr>
+      <tr><td><span class="kw">クロスアカウント</span></td><td>基本は<strong style="color:var(--green)">IAMロール信頼関係+STS AssumeRole</strong>一択</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ===== TAB1: IAM・クロスアカウント ===== -->
+<div class="section" id="s1">
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1003</span><span class="qtheme">エンジニアの最小権限管理と運用オーバーヘッド削減</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">業務内容に応じたIAMロールを作成し、エンジニアが該当ロールを引き受けて作業する</div>
+      <div class="ans-reason">最小特権の原則を満たし、STS（一時認証情報）により長期認証情報の漏洩リスクを低減するベストプラクティス。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Cognito IDプール + グループ機能</div>
+      <div class="ans-reason">Cognitoはアプリのエンドユーザー向け認証。社内エンジニアの運用に使うのは設計思想から外れ運用負荷が激増。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">自社アプリの一般ユーザーにモバイルからS3等へ一時アクセスを許可したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ 共通のIAMユーザーを1つ作成</div>
+      <div class="ans-reason">認証情報の共有は監査証跡ができなくなる重大なアンチパターン。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">なし（SAA試験では常に不正解）</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ AdministratorAccess付与+事後検出</div>
+      <div class="ans-reason">管理者権限の一括付与は誤操作を事前に防げずリスクが高すぎる。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">開発環境の一時検証かつSCPで致命的操作を制限している場合のみ一部正解</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「運用オーバーヘッドを最小限」に釣られて「共通ユーザー」「Admin一括付与」を選ばない</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1023</span><span class="qtheme">複数子アカウントDynamoDBから管理アカウントへのセキュアなデータ集約</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">子アカウントごとにIAMロール作成（信頼ポリシーで管理アカウント指定）+ STS AssumeRole</div>
+      <div class="ans-reason">長期認証情報を排除し、短時間で自動失効する一時認証情報で最も安全にクロスアカウントアクセスを実現。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ リソースベースポリシー + VPCエンドポイント接続</div>
+      <div class="ans-reason">DynamoDBはリソースベースポリシー非対応（経路制限できても認証は解決しない）。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">S3バケットやSQSキューなど対応サービス間のクロスアカウントアクセスなら正解</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Secrets Managerに接続情報を格納・自動ローテーション</div>
+      <div class="ans-reason">DynamoDBはIAM認証であり、格納すべき「シークレット」自体が存在しない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">RDSやRedshiftなどパスワード認証が必要なDBへの接続なら正解</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ IAMユーザー作成+アクセスキー発行+手動ローテーション</div>
+      <div class="ans-reason">長期認証情報を複数管理するアンチパターン。アカウント増加で運用が破綻。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">なし（SAA試験では常に不正解）</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「Secrets Manager」の"自動ローテーション"に釣られない。DynamoDBはそもそもパスワード認証ではない</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1027</span><span class="qtheme">クロスアカウントでのS3バケットアクセス設定</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">アカウントBのIAMロールの信頼関係にアカウントAを指定 + アカウントA側でsts:AssumeRoleを許可</div>
+      <div class="ans-reason">長期認証情報を排除し、信頼ポリシー（使われる側）とIAMポリシー（使う側）の両方で制御する標準的なベストプラクティス。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ アカウントAのIAMユーザーにPowerUserAccessを付与</div>
+      <div class="ans-reason">自アカウント内の権限が強くなるだけで、別アカウントのリソースへのアクセス権は付与されない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">自アカウント内のS3以外のリソースに強い権限を一括付与したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ アカウントBにメンバーごとIAMユーザー作成+アクセスキー発行</div>
+      <div class="ans-reason">管理対象ユーザーと漏洩リスクのある長期キーが倍増。運用負荷とセキュリティリスクが激増。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">なし（SAA試験では常に不正解）</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ S3バケットポリシーでワイルドカード(*)プリンシパル指定</div>
+      <div class="ans-reason">不特定多数に公開されてしまい重大なセキュリティインシデントになる。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">静的Webサイトホスティング等で世界中に一般公開したい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「最小権限の原則」があるため、PowerUserAccessやワイルドカード指定は即除外</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qtheme">LambdaからDynamoDBへの安全なアクセス権限付与</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">IAMロールを作成しLambdaの実行ロールに設定</div>
+      <div class="ans-reason">長期認証情報を使わず自動ローテーションされる一時認証情報を使用するベストプラクティス。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ LambdaのリソースベースポリシーにPutItem権限を追加</div>
+      <div class="ans-reason">リソースベースポリシーは外部からの呼び出し許可用であり、送信権限の付与には使えない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">他アカウントやS3等からこのLambda関数の呼び出し(Invoke)を許可する要件なら正解</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ DynamoDBのリソースポリシーでLambdaのARNを許可</div>
+      <div class="ans-reason">DynamoDBはリソースベースポリシー自体をサポートしていない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">対象サービスがS3やSQS等リソースベースポリシー対応サービスなら正解</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Parameter StoreにIAMユーザーのアクセスキーを保存し取得</div>
+      <div class="ans-reason">アクセスキーの使用は長期的な認証情報にあたりセキュリティポリシー違反。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">IAMロールが利用できないサードパーティ製外部サービスへのAPIキー等を保持する要件なら正解</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「DynamoDBのリソースポリシー」→DynamoDBはリソースベースポリシー非対応。他サービスへのアクセスは必ず「実行ロール」を使用</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qtheme">IAMアイデンティティベースポリシーの直接アタッチ対象</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">IAM ロールおよび IAM グループ（＋IAMユーザー）</div>
+      <div class="ans-reason">アイデンティティベースポリシーはIAMエンティティ（ユーザー・グループ・ロール）にのみ直接アタッチ可能。</div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">AWSリソース（RDSやS3等）やOU（組織単位）にはアタッチできない。リソース側は「リソースベースポリシー」、OUへは「SCP」を使用</div></div>
+  </div>
+
+  <div class="mnemo-card" style="background:var(--surface);border:1px dashed var(--purple);border-radius:10px;padding:12px;margin-top:4px;">
+    <div style="color:var(--purple);font-weight:700;font-size:12px;margin-bottom:6px;">🧠 このタブの共通鉄則</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.8;">
+      クロスアカウント・最小権限系の問題は<strong style="color:var(--green)">「IAMロール + AssumeRole（STS）」が答えの型</strong>。<br>
+      迷ったら「①長期キーを使ってないか ②信頼ポリシーとIAMポリシーの両方が揃っているか」の2点をチェック。DynamoDBはリソースベースポリシー非対応な点も要注意。
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB2: S3セキュリティ ===== -->
+<div class="section" id="s2">
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1004</span><span class="qtheme">S3とCloudFrontを使用した個別コンテンツの購入者限定配信</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">CloudFrontの署名付きURLを購入時にアプリ側で発行し、有効期限付きで返却する</div>
+      <div class="ans-reason">各作品が単一ファイルの場合のプライベートコンテンツ配信で、購入者だけに期間限定アクセスを許可する最適解。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ WAFのIPセットルールでIP許可リスト登録</div>
+      <div class="ans-reason">視聴者のIPは動的に変わり管理不能。コンテンツ単位の購入判定もWAF（ネットワーク層）では不可能。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">特定オフィス等の固定IPからのアクセスを丸ごと一括制限したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ オリジンアクセスコントロール（OAC）でS3直接アクセス遮断</div>
+      <div class="ans-reason">OACは「CloudFront経由を強制」するだけで、個別の購入判定は行えない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">S3 URL直叩きを防ぎ必ずCloudFront経由にしたい（購入判定は別途）場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ 購入者ごとにIAMユーザー作成+バケットポリシーでGetObject許可</div>
+      <div class="ans-reason">不特定多数へのIAMユーザー発行はスケールせず（上限5,000）、重大なセキュリティリスク。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">なし（SAA試験では常に不正解）</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「単一のメディアファイル」→署名付きURLが正解。複数セグメント（HLS等）なら署名付きCookieが正解になるので注意</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1005</span><span class="qtheme">医療記録の長期保管とルートユーザーを含む削除禁止要件</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">S3標準に格納 + Object Lockコンプライアンスモードで保持10年 + 1年後Glacier Deep Archiveへ移行</div>
+      <div class="ans-reason">S3標準で初年度の即時アクセスを担保、コンプライアンスモードでルート含む全ユーザーの削除を完全に防止、Deep Archiveで9年間のコスト最小化。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Glacier Flexible Retrievalに初期格納+バケットポリシーで削除拒否</div>
+      <div class="ans-reason">Glacierは初期格納時に即時アクセス不可。バケットポリシーではルートユーザーの削除を防げない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">アクセス頻度が最初から極めて低く、取り出しに時間がかかっても良い場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ S3標準+KMSキーポリシーで削除拒否+Intelligent-Tiering移行</div>
+      <div class="ans-reason">KMSポリシーはオブジェクト削除権限を制御できず、Intelligent-TieringはDeep Archiveよりコスト高。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">アクセスパターン予測不可能で暗号化キー権限を厳密管理したい（削除防止要件なし）場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ 1ゾーン-IA+ガバナンスモード+Glacier Flexible移行</div>
+      <div class="ans-reason">1ゾーン-IAは単一AZで可用性要件を満たさず、ガバナンスモードは特権ユーザーの削除を許可してしまう。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">データが再生成可能でAZ耐障害性不要、特定管理者には削除権限を残したい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「いかなるユーザーも削除できてはならない」→ガバナンスモードやバケットポリシーではルート削除を防げない。必ず「コンプライアンスモード」</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1008</span><span class="qtheme">S3のサーバーサイド暗号化（SSE）の強制</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">バケットポリシーで s3:x-amz-server-side-encryption 条件キーが存在しないPutObjectを拒否</div>
+      <div class="ans-reason">リクエストヘッダーを評価して暗号化されていないアップロードを未然に防ぐ「予防的制御」のベストプラクティス。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ CloudTrailで検出しLambdaで自動削除</div>
+      <div class="ans-reason">事後検出・削除の仕組みであり、暗号化されていないオブジェクトが一瞬でも存在してしまうリスクがある。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">アップロード自体を制限せず、違反オブジェクトに監査ログを残し事後対処したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ aws:SecureTransportがfalseの場合にPutObject拒否</div>
+      <div class="ans-reason">これは転送中暗号化（HTTPS通信）の強制であり、保存時暗号化とは無関係。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">S3への全API通信をHTTPS限定にし平文アクセスを遮断したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ s3:x-amz-acl条件キーがauthenticated-readでない場合に拒否</div>
+      <div class="ans-reason">ACLによる認可（アクセス権限）の制限であり、暗号化の有無を評価するものではない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">アップロード時に特定の既定ACL付与を強制したい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「サーバーサイド暗号化」の要件で「転送中暗号化」を意味するSecureTransportと混同しない</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qtheme">S3バケットのパブリックアクセス一括禁止とガードレールの強制</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">SCPでs3:PutBucketPublicAccessBlockの変更操作を拒否し、各アカウントでS3 Block Public Accessをアカウントレベルで有効化</div>
+      <div class="ans-reason">設定変更だけで全バケットを一括保護できる「Block Public Access」と、設定変更自体を拒否する「SCP」の組み合わせで、一時的な公開リスクすら発生させない予防的コントロールの最適設計。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ CloudWatch監視+SNS通知+手動でCLI修正</div>
+      <div class="ans-reason">変更検知後の手動対応に依存し、夜間・休日の対応遅れでパブリック状態が放置されるリスクがある。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">自動ブロックが導入できず、人手によるダブルチェックで修正したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Configマネージドルール+SSM Automationで自動修復</div>
+      <div class="ans-reason">問題発生後に直す検出的コントロールであり、検知から修復までのタイムラグの間に一瞬公開されてしまうリスクを排除できない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">特定バケットの例外的な公開は許容し、非準拠バケットのみ事後是正したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Macieでスキャン+EventBridge+Lambdaでポリシー自動削除</div>
+      <div class="ans-reason">事後対応の検出的コントロールで公開リスクが残る上、Macieの継続利用料が余計にかかり過剰設計。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">公開設定だけでなくオブジェクト内の機密データ（PII等）のコンテンツ分析も行いたい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「制限を解除できないように」＋「運用オーバーヘッド最小」→事後検知系はタイムラグがあり全滅。「Block Public Access＋SCP」の最強コンボ</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qtheme">S3オブジェクトの改ざん防止（WORM機能）と既存オブジェクトへの一括適用</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">S3オブジェクトロックをコンプライアンスモードに設定し、既存データへはS3バッチオペレーションで一括適用</div>
+      <div class="ans-reason">ルート含む全ユーザーの削除を遮断し、マネージドで運用負荷なく大量オブジェクトに一括適用できる最適設計。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ バージョニング+MFA Delete+ライフサイクルルール</div>
+      <div class="ans-reason">MFA所持者による削除が可能でありWORM（削除禁止）要件を満たさない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">削除制限ではなく誤操作復旧と自動削除が目的の場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ コンプライアンスモード+CLIスクリプトで個別適用</div>
+      <div class="ans-reason">個別API実行によるスロットリングやエラー処理の実装負担・運用オーバーヘッドが大きい。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">対象が数件程度の少数オブジェクトの場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ ガバナンスモード+CLIスクリプトで個別適用</div>
+      <div class="ans-reason">特権権限を持つユーザーによる削除・ロック解除ができてしまい規制要件に不十分。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">管理者の緊急削除・解除権限を残したい社内標準運用の場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「管理者含め誰にも削除させない」→コンプライアンスモード一択。既存の大量データへの適用は個別CLIではなく「S3バッチオペレーション」</div></div>
+  </div>
+
+  <div class="mnemo-card" style="background:var(--surface);border:1px dashed var(--purple);border-radius:10px;padding:12px;margin-top:4px;">
+    <div style="color:var(--purple);font-weight:700;font-size:12px;margin-bottom:6px;">🧠 このタブの共通鉄則</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.8;">
+      S3の「削除させない」要件は<strong style="color:var(--green)">Object Lock コンプライアンスモード</strong>一択。<br>
+      「暗号化を強制」は<strong style="color:var(--green)">バケットポリシー + 条件キー</strong>で予防的に。転送中(SecureTransport) vs 保存時(SSE)の混同に注意。<br>
+      「パブリックアクセス根絶」は<strong style="color:var(--green)">Block Public Access + SCP</strong>の予防的コンボ。事後検知系（Config/Macie）はタイムラグがあり不正解になりやすい。
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB3: 暗号化(KMS/EBS) ===== -->
+<div class="section" id="s3">
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1025</span><span class="qtag2">2つ選択</span><span class="qtheme">Lambda関数の環境変数暗号化（KMSカスタマーマネージドキー）</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解（2つ）</div>
+      <div class="ans-main">① Lambda実行ロールのIAMポリシーにkms:Decryptを許可<br>② KMSキーポリシーでLambda実行ロールをプリンシパルとしてkms:Decryptを許可</div>
+      <div class="ans-reason">カスタマーマネージドキーの場合、IAMポリシー（使う側）とKMSキーポリシー（使われる側）の両方で許可する「二重認可モデル（AND条件）」が必要。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ CloudTrailでKMS APIコールのログ記録を有効化</div>
+      <div class="ans-reason">監査ログ（発見的統制）であり、実行時の復号アクセス権限（予防的統制）を与える設定ではない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">KMSの利用状況や復号リクエスト履歴を後から監査したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Lambdaのリソースベースポリシーに KMS サービスプリンシパルからの呼び出しを許可</div>
+      <div class="ans-reason">リソースベースポリシーは「外部サービスがLambdaを呼び出す」方向の制御。「LambdaがKMSを呼ぶ」逆方向とは無関係。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">S3やEventBridge等をトリガーにLambdaを自動起動させたい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ VPCセキュリティグループでKMSエンドポイントへのアウトバウンド許可</div>
+      <div class="ans-reason">SGはネットワーク到達性の制御であり、KMS APIの実行認可（IAM）は解決しない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">VPC内LambdaがSGのOutbound拒否でKMSと通信できない問題を解消したい（権限は別途付与済み）場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「カスタマーマネージドキー」を見た瞬間、デフォルトキーとは違い「キーポリシー編集必須＝2つ選択」を意識する</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1030</span><span class="qtag2">2つ選択</span><span class="qtheme">全アカウントでのEBS暗号化の強制と開発者の手順変更最小化</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解（2つ）</div>
+      <div class="ans-main">① 各アカウントでEC2のEBSデフォルト暗号化を有効化しKMSキー指定<br>② ルートOUに適用するSCPでec2:Encryptedがtrueでないec2:CreateVolumeを拒否</div>
+      <div class="ans-reason">デフォルト暗号化で開発者の追加作業をゼロにしつつ、SCPの予防的制御でルートユーザー含む全メンバーの非暗号化ボリューム作成を確実にブロック。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ AWS Configマネージドルールで非準拠リソースを自動削除</div>
+      <div class="ans-reason">作成後の発見的制御かつ自動削除であり、一瞬でも非暗号化ボリュームが存在し、重要データが予期せず消失するリスクがある。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">既存の非暗号化ボリュームを検出し、削除ではなく通知・タグ付けで事後監査したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ 各アカウントのIAMユーザー/ロールに個別インラインポリシーを追加</div>
+      <div class="ans-reason">全ユーザー・ロールへの個別設定で運用オーバーヘッドが極めて高く、IAMポリシーではルートユーザーの操作制限を回避できない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">Organizations(SCP)未使用で、特定アカウント内の特定IAMユーザー群にのみ暗号化を強制したい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「手順変更を最小限」→開発者が意識せず暗号化される「デフォルト暗号化」＋組織全体のガードレール「SCP」の組み合わせ</div></div>
+  </div>
+
+  <div class="mnemo-card" style="background:var(--surface);border:1px dashed var(--purple);border-radius:10px;padding:12px;margin-top:4px;">
+    <div style="color:var(--purple);font-weight:700;font-size:12px;margin-bottom:6px;">🧠 このタブの共通鉄則</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.8;">
+      「組織全体で強制」系は<strong style="color:var(--green)">SCP</strong>が定番の答え。IAMポリシーだけではルートユーザーを制限できない点に注意。<br>
+      KMSカスタマーマネージドキーは<strong style="color:var(--green)">IAMポリシー＋キーポリシーの2点セット</strong>を忘れずに。
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB4: ログ・監査 ===== -->
+<div class="section" id="s4">
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1006</span><span class="qtheme">Session Managerのセッションログ保存と運用負荷の削減</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">Session Managerの設定画面からS3への出力を有効化し、保存先バケットを指定する</div>
+      <div class="ans-reason">サービス自体に組み込まれたネイティブ機能を有効化するだけで、追加コンポーネントなしで自動保存できる最善のアプローチ。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Lambda + EventBridgeでセッション終了イベントからログ取得</div>
+      <div class="ans-reason">マネージド機能があるのにカスタムコードの開発・保守が必要になり、バグ混入や運用負荷を高める。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">サードパーティの外部ストレージ等に、セッション終了を契機にログをカスタム加工して転送したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ 各インスタンスでローカル保存+DataSyncで定期転送</div>
+      <div class="ans-reason">大規模移行向けのDataSyncをログ転送に使うのは過剰。バッチ転送中にインスタンスが終了すると未転送ログが消失（コンプライアンス違反）。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">オンプレ等からTB〜PB級のログファイルを一括・定期同期・移行したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ CloudWatchエージェント+Data Firehose経由でS3配信</div>
+      <div class="ans-reason">多段パイプライン（エージェント、Logs、Firehose）の構築が必要になり、構成が複雑化する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">セッションログ以外の多種多様なログをリアルタイム集約し、データ変換を挟んでS3へ流したい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「運用負荷を最小限」→自前サーバー・コード・多段サービスを真っ先に除外し「設定画面ポチだけ」のネイティブ機能を選ぶ</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1024</span><span class="qtheme">EC2へのセキュアなメンテナンスアクセスと共有キーの廃止</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">SSM Agent導入のEC2に対し、Systems Manager Session Manager経由で接続しIAMで権限制御</div>
+      <div class="ans-reason">SSHポート(22)開放やSSHキーペアが不要となり、IAMによる一元管理と監査ログ取得を最小の運用負荷で実現。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ CloudWatchエージェント+Lambdaのカスタム実行基盤</div>
+      <div class="ans-reason">独自コードの構築・テスト・保守が必要になり、運用オーバーヘッドが不必要に増加する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">AWSがネイティブ対応していない特殊なコマンド実行システムが必要な場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ プライベートサブネットに踏み台ホスト+Directory Service認証でSSH</div>
+      <div class="ans-reason">踏み台ホスト自体の保守コストが発生し、各EC2へのSSHキー共有問題を根本解決できない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">既存のオンプレAD環境を流用し、従来のSSHクライアントでの多段接続を維持しなければならない場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ ACMでクライアント証明書発行+証明書ベースSSH認証</div>
+      <div class="ans-reason">ACMは主にTLS証明書発行サービスであり、各サーバーのsshd設定変更等の自前管理の手間が膨大になる。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">AWS外部の独自Linuxサーバー群にCA経由の証明書ベースSSHを独自構築したい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「運用負荷を最小限」→踏み台ホストやLambdaカスタム基盤を即除外し、設定のみで導入できる「Session Manager」を選ぶ</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qtheme">プライベートEC2へのセキュアなシェルアクセスとマルチアカウントコンソール管理</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">SSM Session Managerでシェル接続し、IAM Identity Centerでコンソールフェデレーション認証を行う</div>
+      <div class="ans-reason">SSHキー管理・ポート開口を排除しつつ、AWS Organizations統合で一元アクセス制御を実現する。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ AWS Managed Microsoft AD + AD Connectorでフェデレーション構成</div>
+      <div class="ans-reason">既存ADが無い環境では過剰な構成であり、構築・運用コストが高く不適切。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">既にオンプレのAD環境が存在し認証基盤をそのまま統合・拡張したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ EC2 Instance Connect Endpoint経由で一時SSHキーでアクセス</div>
+      <div class="ans-reason">一時鍵のプッシュ処理と根本的なSSHプロトコル依存が発生し「SSHキー排除」に反する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">SSM Agentが導入できずSGのSSH開放なしにPrivate IP接続したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ 各アカウントに個別IAMユーザー作成+MFA強制</div>
+      <div class="ans-reason">アカウントごとにユーザー管理が分散・煩雑化し、契約終了時の権限削除漏れリスクが高まる。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">単一アカウント運用かつフェデレーション基盤を導入しない小規模要件の場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「SSHキーの配布やインバウンドポート開放を回避」→ポート22を開けずSSHプロトコルも使わないSSM Session Manager（443アウトバウンドのみ）が最適解</div></div>
+  </div>
+
+  <div class="mnemo-card" style="background:var(--surface);border:1px dashed var(--purple);border-radius:10px;padding:12px;margin-top:4px;">
+    <div style="color:var(--purple);font-weight:700;font-size:12px;margin-bottom:6px;">🧠 このタブの共通鉄則</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.8;">
+      「運用負荷最小」＋「EC2への安全なアクセス/ログ」ときたら<strong style="color:var(--green)">Systems Manager Session Manager</strong>がほぼ答え。<br>
+      自前で組む選択肢（Lambda、踏み台、カスタムパイプライン）はまず疑ってかかる。マルチアカウントのコンソール管理は<strong style="color:var(--green)">IAM Identity Center</strong>とセットで覚える。
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB5: ネットワーク制御 ===== -->
+<div class="section" id="s5">
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1031</span><span class="qtag2">2つ選択</span><span class="qtheme">SG ID参照によるRDSへの接続元インスタンス限定</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解（2つ）</div>
+      <div class="ans-main">① フロントエンド用SGで443(0.0.0.0/0)を許可<br>② RDS用SGのソースにフロントエンドのSG IDを指定して3306を許可</div>
+      <div class="ans-reason">インターネットからのパブリックアクセスを受け付けつつ、SG相互参照によりIPに依存せず特定インスタンスのみにDB接続を限定できる最適設計。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ RDS SGのソースにフロントエンドのサブネットCIDRを指定</div>
+      <div class="ans-reason">サブネット単位の許可となり、同サブネット内の別目的インスタンスからのアクセスまで許可してしまい粒度が粗い。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">特定サブネット範囲全体からの通信を一括許可したい（インスタンス単位の識別は不要）場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ RDS SGでフロントエンドSG以外からの3306通信を拒否するルール構成</div>
+      <div class="ans-reason">セキュリティグループは許可ルール（ホワイトリスト）のみをサポートし、明示的な拒否ルールは存在しない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">なし（SGに拒否ルールという選択肢自体がSAAでは常に不正解）</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ プライベートサブネットのNACLで0.0.0.0/0からのインバウンドを拒否</div>
+      <div class="ans-reason">NACLはサブネット単位の制御であり、フロントエンドのみ許可し他は拒否というインスタンス単位の制御は行えない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">特定の不正IP・CIDRブロック全体をサブネット手前で完全遮断したい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「セキュリティグループ以外からの通信をブロックする拒否ルール」→SGに拒否ルールはない。暗黙の拒否で動作する基本仕様を突く定番ひっかけ</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1039</span><span class="qtheme">CloudFront経由の映像配信における国別制限とカスタムエラー表示</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">CloudFrontディストリビューションでジオリストリクションを有効化しホワイトリスト登録、403用カスタムエラーページを指定</div>
+      <div class="ans-reason">追加料金なしの組み込み機能のみでエッジ判定を行い、運用負荷とオリジン負荷を最小限に抑えて要件を達成できるベストプラクティス。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ WAF Web ACL + IPレピュテーションルールでブロック</div>
+      <div class="ans-reason">IPレピュテーションは「不正なIP」を弾くもので特定国のみ許可する要件に合わず、WAFの追加料金と管理コストが発生する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">国別制限ではなく、bot等の既知の悪意あるIP群からの攻撃を自動遮断したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Lambda@EdgeでCloudFront-Viewer-Countryヘッダーを参照し拒否</div>
+      <div class="ans-reason">組み込み機能で実現できるのにカスタムコードの開発・保守が必要になり、無駄な実行課金と運用負荷が発生する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">都市レベルの判定や時間帯・クエリパラメータと組み合わせた複雑な制御を行いたい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ 署名付きCookieを発行するオリジンを構築し位置情報で判定</div>
+      <div class="ans-reason">複数ファイル向けの署名付きCookieは、オリジン側にGeoIPロジックを自前構築する必要があり開発・運用コストが激増する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">国別制限とは無関係に、有料会員のみに複数コンテンツへのアクセスをまとめて許可したい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「最小限の運用負荷」→自前コード開発が必要なLambda@Edgeやオリジン自前判定を即除外し、標準マネージド機能（ジオリストリクション）を選ぶ</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qtheme">IPv6におけるプライベートサブネットからのアウトバウンド専用通信</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">Egress-Onlyインターネットゲートウェイを作成しルートを設定</div>
+      <div class="ans-reason">IPv6専用で外部からの接続開始を遮断しつつ、アウトバウンド通信のみを許可する。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ NATゲートウェイを配置しルートを設定</div>
+      <div class="ans-reason">NAT GatewayはIPv4用（またはIPv6のNAT64）であり、IPv6直接のアウトバウンド専用通信には使用しない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">通信プロトコルがIPv4の場合なら正解</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ インターネットゲートウェイをアタッチしルートを設定</div>
+      <div class="ans-reason">インターネット側からのインバウンド接続が許可され「通信開始を一切許可しない」要件に違反する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">パブリックサブネットとして双方向通信を許可する要件なら正解</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ 仮想プライベートゲートウェイをアタッチしルートを設定</div>
+      <div class="ans-reason">オンプレミス接続（VPN/Direct Connect）用でありインターネット通信には使えない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">オンプレ拠点や他社VPCへ閉域網経由で通信する要件なら正解</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「IPv6」＋「インターネットからの接続開始を許可しない」→IPv4のNAT Gatewayに相当するIPv6用構成要素は「Egress-Only IGW」</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qtheme">3層構成ウェブアプリケーションにおけるセキュリティグループ最小権限設定</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">前の層のSGを送信元として各層のインバウンドのみを許可（ALB→FE、FE→API、API→DB）</div>
+      <div class="ans-reason">直前の層のセキュリティグループIDを指定し、層間のトラフィックフローを順方向にのみ最小限で許可する。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ APIサーバー層に0.0.0.0/0からのHTTPS許可</div>
+      <div class="ans-reason">インターネット全公開となり、プライベートサブネットの層分離と最小権限の原則に反する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">APIサーバーがパブリックサブネットに配置され不特定多数から直接リクエストを受ける要件なら正解</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ フロントエンド層にAPIサーバー層SGからのHTTPS許可</div>
+      <div class="ans-reason">通信の送信元と送信先が逆。応答通信はステートフル機能で自動許可されるためインバウンド設定は不要。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">APIサーバー側からフロントエンド側へ能動的にリクエストを開始する特殊アーキテクチャの場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ データベース層にフロントエンド層SGからのPostgreSQL(5432)許可</div>
+      <div class="ans-reason">APIサーバー層を飛び越えてデータベースへ直接アクセスさせることになり、層分離（3層構成）に反する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">APIサーバー層を挟まない2層構成の要件なら正解</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「直前の層のSGを参照（SG-to-SG）」＋「ステートフル性」→戻りの通信は自動許可されるため、通信を開始する側のSG IDのみを送信元に指定</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qtheme">VPC内プライベートサブネットからS3へのパブリックインターネット非経由接続</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">S3用のゲートウェイ型VPCエンドポイントを作成しルートを設定</div>
+      <div class="ans-reason">追加料金なしでAWSプライベート網経由の接続を実現する最善手。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Site-to-Site VPNを構成しオンプレ経由でルーティング</div>
+      <div class="ans-reason">迂回経路により転送速度低下や不要なVPNコストが発生し不適切。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">オンプレ側のセキュリティ機器を介してアクセス監査を行う要件なら正解</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ NATゲートウェイを作成し経由してアクセス</div>
+      <div class="ans-reason">パブリックインターネットを経過するためセキュリティ要件に違反し、余分な課金も発生する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">外部のサードパーティSaaSへのアウトバウンド通信を行う要件なら正解</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ インターネットゲートウェイをアタッチしデフォルトルート追加</div>
+      <div class="ans-reason">サブネットがパブリック化し「インターネット非経由」の要件に反する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">パブリックIPを持つEC2群をインターネット直接公開する要件なら正解</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「インターネットを経過しない」＋「運用オーバーヘッド最小」→S3/DynamoDBへの閉域アクセスは「ゲートウェイ型VPCエンドポイント」一択</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qtheme">クロスリージョンVPC間接続とセキュリティグループ制御</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">VPCピアリングを確立しプライベートIP範囲（CIDR）で許可</div>
+      <div class="ans-reason">運用オーバーヘッド最小で接続でき、クロスリージョンではSG ID参照不可のためIP指定が必須となる。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ 両リージョンにTransit Gatewayを構築しSG ID参照で許可</div>
+      <div class="ans-reason">TGWの追加構築で運用負荷が増大し、クロスリージョンではSG ID参照自体が技術的に不可能。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">接続対象VPCが数十〜数百あり一元管理したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ VPCピアリングを確立しSG ID参照で許可</div>
+      <div class="ans-reason">クロスリージョンVPCピアリングではSG IDによる参照制御機能がサポートされていない（同一リージョン限定）。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">接続先VPCが同一リージョン内にある場合なら正解</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Site-to-Site VPN接続を確立しIP範囲で許可</div>
+      <div class="ans-reason">VGW/CGWの設定やIPsec構築が必要で運用オーバーヘッド・コストともに過剰。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">オンプレ拠点とAWS VPC間を閉域暗号化接続する要件なら正解</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「クロスリージョン」での「SG ID参照」→同一リージョンなら可能だがリージョンを跨ぐ場合は「CIDR（IPアドレス範囲）」指定が必須</div></div>
+  </div>
+
+  <div class="mnemo-card" style="background:var(--surface);border:1px dashed var(--purple);border-radius:10px;padding:12px;margin-top:4px;">
+    <div style="color:var(--purple);font-weight:700;font-size:12px;margin-bottom:6px;">🧠 このタブの共通鉄則</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.8;">
+      SGは<strong style="color:var(--red)">拒否ルールを持たない</strong>（許可のみ）。IDによる相互参照でインスタンス単位の細かい制御ができるが、<strong style="color:var(--red)">クロスリージョンではSG ID参照は不可</strong>（CIDR指定が必須）。<br>
+      CloudFrontの組み込み機能（署名付きURL/Cookie、ジオリストリクション等）で解決できるなら、Lambda@Edgeや自前構築は不正解になりやすい。<br>
+      S3/DynamoDBへの閉域アクセスは<strong style="color:var(--green)">ゲートウェイ型VPCエンドポイント</strong>（無料）。IPv6のアウトバウンド専用は<strong style="color:var(--green)">Egress-Only IGW</strong>。
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB6: 分野2 MAP ===== -->
+<div class="section" id="s6">
+  <div class="card">
+    <div class="card-header"><span class="card-title">📋 分野2: 弾力性の高いアーキテクチャの設計（10問）</span></div>
+    <div class="idx-row"><div class="idx-id">1015</div><div class="idx-text">RDS MySQLメジャーバージョンUP → <strong style="color:var(--green)">ブルー/グリーンデプロイ</strong><span class="idx-tag">頻出</span></div></div>
+    <div class="idx-row"><div class="idx-id">1017</div><div class="idx-text">予測不能な負荷への対応 → <strong style="color:var(--green)">動的スケーリング（CloudWatch）</strong></div></div>
+    <div class="idx-row"><div class="idx-id">1018</div><div class="idx-text">Windows静的配信+コード共有 → <strong style="color:var(--green)">S3+CloudFront ＋ FSx for Windows(2つ選択)</strong><span class="idx-tag">2択</span></div></div>
+    <div class="idx-row"><div class="idx-id">1021</div><div class="idx-text">Auroraフェイルオーバー中断最小化 → <strong style="color:var(--green)">RDS Proxy</strong></div></div>
+    <div class="idx-row"><div class="idx-id">1022</div><div class="idx-text">Auroraマルチリージョン RTO/RPO最小化 → <strong style="color:var(--green)">Aurora Global DB+Route53フェイルオーバー</strong><span class="idx-tag">頻出</span></div></div>
+    <div class="idx-row"><div class="idx-id">1026</div><div class="idx-text">GPS位置情報取り込み → <strong style="color:var(--green)">Data Firehose</strong></div></div>
+    <div class="idx-row"><div class="idx-id">1029</div><div class="idx-text">EC2+MySQL高可用性・読取スケール → <strong style="color:var(--green)">ALB+ASG(マルチAZ) ＋ Aurora Replica(2つ選択)</strong><span class="idx-tag">2択</span></div></div>
+    <div class="idx-row"><div class="idx-id">1034</div><div class="idx-text">AZ独立のNAT配置 → <strong style="color:var(--green)">AZごとにNAT Gateway</strong><span class="idx-tag">頻出</span></div></div>
+    <div class="idx-row"><div class="idx-id">1035</div><div class="idx-text">FTP受信+即時イベント処理 → <strong style="color:var(--green)">Transfer Family+S3+Lambda</strong></div></div>
+    <div class="idx-row"><div class="idx-id">1037</div><div class="idx-text">オンプレ+AWS共有ファイルシステム → <strong style="color:var(--green)">EFS（NFS）</strong></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">🎯 分野2 共通鉄則パターン</span></div>
+    <table class="tbl">
+      <tr><th>ひっかけ表現</th><th>反応パターン</th></tr>
+      <tr><td><span class="kw ky">最小限の管理負担/運用負荷</span></td><td>自前構築・EC2ベース・多段パイプラインを即除外 → <strong style="color:var(--green)">フルマネージド/サーバーレス</strong>を選ぶ</td></tr>
+      <tr><td><span class="kw kr">予測不能なタイミング</span></td><td>スケジュール/予測スケーリングは除外 → <strong style="color:var(--green)">動的スケーリング</strong>一択</td></tr>
+      <tr><td><span class="kw kp">RTO/RPOをともに最小化</span></td><td>バックアップ/DMSは除外 → <strong style="color:var(--green)">Aurora Global Database</strong></td></tr>
+      <tr><td><span class="kw kg">AZ障害時に他AZへ影響させない</span></td><td>NAT等の共有リソースは<strong style="color:var(--green)">AZごとに複製配置</strong>が鉄則</td></tr>
+      <tr><td><span class="kw">Linux共有ストレージ・NFS</span></td><td>EBS(単一AZ限定)・S3(非NFS)・FSx(Windows向け)は除外 → <strong style="color:var(--green)">EFS</strong>一択</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ===== TAB7: DB可用性・移行 ===== -->
+<div class="section" id="s7">
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1015</span><span class="qtheme">RDS MySQLのデータ整合性を維持したメジャーバージョンアップグレード</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">RDSブルー/グリーンデプロイでステージング環境を構成し、検証後にスイッチオーバーで切り替える</div>
+      <div class="ans-reason">自動のバイナリログレプリケーションにより検証中も本番データが同期され、1分未満のダウンタイムかつ最小の管理負担で移行できるベストプラクティス。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ リードレプリカを作成し昇格させてからアップグレード</div>
+      <div class="ans-reason">レプリカを昇格（独立）させた時点で本番との同期が断絶し、データ整合性が維持できなくなる。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">本番書き込みを完全停止、またはレプリカを別の独立システムとして切り離す場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ mysqldumpでエクスポート→新バージョンRDSへインポート→DNS切替</div>
+      <div class="ans-reason">大規模DBでは長時間を要し、作業中の更新が反映されず整合性が失われる上に手動手順が多い。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">DB規模が極めて小さく、長時間のダウンタイムを確保して一括移行する場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ PITR（ポイントインタイムリカバリ）で復元しバージョンアップ</div>
+      <div class="ans-reason">復元時点の過去データで固定され、その後の本番トランザクションを追従同期できない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">継続同期は不要で、過去データに遡り新バージョンの挙動をスタンドアロンでテストしたい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「最小限の管理負担」＋「データの整合性を維持」の2つが揃ったら全自動の「ブルー/グリーンデプロイ」一択</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1021</span><span class="qtheme">Aurora PostgreSQLのフェイルオーバー時のサービス中断最小化</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">RDS Proxyを介してデータベースへ接続する構成に変更し、接続切り替えをプロキシに委任する</div>
+      <div class="ans-reason">アプリ側のDNSキャッシュや接続プール問題をRDS Proxyが透過的に吸収し、アプリ変更なしでダウンタイムを数秒レベルに短縮できるベストプラクティス。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ レプリカ数を増やしインスタンス優先度を調整して昇格時間短縮</div>
+      <div class="ans-reason">DB側の昇格速度は上がっても、アプリ側のDNSキャッシュ保持による接続断（数分間）の根本原因を解決できない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">アプリ側の接続切断は考慮不要で、DBクラスター側の昇格処理時間のみを制御したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ DAX（DynamoDB Accelerator）をキャッシュレイヤーとして導入</div>
+      <div class="ans-reason">DAXはDynamoDB専用のインメモリキャッシュであり、リレーショナルDBのAuroraには技術的に適合しない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">DynamoDBアプリで読み取り性能向上とフェイルオーバー可用性を担保したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ 別リージョンにAuroraグローバルデータベースを構成しトラフィック切替</div>
+      <div class="ans-reason">クロスリージョンDR用の大規模な仕組みであり、アプリ側にエンドポイント切替ロジックが必要になり負荷が激増する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">リージョン全体の壊滅的障害に備え、最小データ損失で別リージョンに復旧させたい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「アプリコードの大幅変更や追加の運用負荷を避けつつ」→接続先URL変更のみで済む「RDS Proxy」を選ぶ</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1022</span><span class="qtheme">Auroraのマルチリージョン移行とRTO/RPOの最小化</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">セカンダリリージョンにEC2 ASGを構築 + Aurora Global Databaseで両リージョンにクラスター配置 + Route53フェイルオーバールーティング＋ヘルスチェックで切替</div>
+      <div class="ans-reason">ストレージレイヤーでの専用レプリケーションによりプライマリの負荷を抑えつつ、RPO約1秒・RTO約1分を両立できるマルチリージョンDRのベストプラクティス。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ クロスリージョンリードレプリカを作成し障害時にスタンドアロン昇格</div>
+      <div class="ans-reason">binlogベースのレプリケーションとなり、ストレージレベル同期のGlobal Databaseに比べRPO・RTOともに長くなる。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">Global Database非対応の古いエンジンや、より安価な読み取り専用配置がしたい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ 自動バックアップをセカンダリへコピーし障害時に復元</div>
+      <div class="ans-reason">バックアップ復元（PITR）はクラスター新規作成に数十分以上かかり、取得頻度に応じたデータ損失が発生する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">RTO/RPOが数時間〜数日でも許容され、コスト最優先でバックアップ退避したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ AWS DMSの継続的レプリケーションタスクで同期</div>
+      <div class="ans-reason">アプリ層でのCDC同期は差分転送の遅延や管理の複雑さが増し、切り替えも手動手順が必要になりRTO/RPO最小化を満たせない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">異なるDBエンジン間（例: Oracle→Aurora）で異機種間レプリケーションを行いたい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「RTOとRPOをともに最小限」→バックアップやDMSを即除外し「Aurora Global Database」を選ぶ</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1029</span><span class="qtag2">2つ選択</span><span class="qtheme">EC2・MySQL一体型環境の高可用性と読取スケーリング</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解（2つ）</div>
+      <div class="ans-main">① ALBを前段配置＋複数AZのASGでプライベートサブネット内EC2を管理<br>② MySQLをAurora MySQLへ移行し、別AZにAurora Replicaを追加してリーダーエンドポイントで読取をオフロード</div>
+      <div class="ans-reason">①はSPOFを排除しアプリ層の高可用性・自動スケーリングを確保。②は最大5倍のスループットを持つAuroraへ移行し、最大15個のレプリカへ読取負荷を分散する最適設計。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ 別リージョンにEC2配置+Route53レイテンシーベースルーティング</div>
+      <div class="ans-reason">単一リージョン内の高可用性・スケーラビリティが未解決のまま別リージョン展開し、DB同期や運用の複雑性が激増する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">地理的に最もレイテンシーの低いリージョンから配信しつつリージョン障害にも備えたい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Aurora MySQLグローバルデータベースを構成しセカンダリで読取処理</div>
+      <div class="ans-reason">同一リージョン内の読取パフォーマンス向上が要件なのに、クロスリージョン同期を行うのは明らかな過剰設計。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">大規模DR対策として1秒未満RPOで他リージョン同期しつつ現地読取も高速化したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ RDS for MySQLのマルチAZを有効化しスタンバイに読取を振り分け</div>
+      <div class="ans-reason">マルチAZのスタンバイは「障害への備え（待機系）」であり、アクティブな読取クエリの処理は技術的に不可能。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">読取性能向上は考慮せず、純粋にデータ耐久性と自動フェイルオーバーのみを担保したい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「読み取りパフォーマンス向上」→スタンバイに読取を振れない「RDSマルチAZ」を除外し「Aurora Replica＋リーダーエンドポイント」を選ぶ</div></div>
+  </div>
+
+  <div class="mnemo-card" style="background:var(--surface);border:1px dashed var(--blue);border-radius:10px;padding:12px;margin-top:4px;">
+    <div style="color:var(--blue);font-weight:700;font-size:12px;margin-bottom:6px;">🧠 このタブの共通鉄則</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.8;">
+      「ダウンタイム最小」「サービス中断最小」の文脈では<strong style="color:var(--green)">ブルー/グリーンデプロイ</strong>（DB移行）と<strong style="color:var(--green)">RDS Proxy</strong>（フェイルオーバー時の接続維持）が定番。<br>
+      「RTO/RPOをともに最小化」＝<strong style="color:var(--green)">Aurora Global Database</strong>、読取スケールは<strong style="color:var(--green)">Auroraリードレプリカ＋リーダーエンドポイント</strong>。
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB8: Auto Scaling・NAT ===== -->
+<div class="section" id="s8">
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1017</span><span class="qtheme">Auto Scalingグループにおける予測不能な負荷への対応</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">CloudWatchメトリクスをトリガーとした動的スケーリングポリシーを適用する</div>
+      <div class="ans-reason">リアルタイム監視により予測不能なタイミングの負荷急増へ即座に追従しつつ、低負荷時は自動スケールインでコストを最小化できる最適設計。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ 管理者がダッシュボードを目視確認し手動調整</div>
+      <div class="ans-reason">突発的な急増への対応にタイムラグが発生し、レスポンスタイム維持が困難かつ監視負荷が高すぎる。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">トラフィックが極めて低頻度・緩やかで24時間監視体制が既に確立されている場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ 時刻ベースで容量を切り替えるスケジュールスケーリング</div>
+      <div class="ans-reason">事前に定義した日時に基づいて動作するため、予測不能な突発トラフィックへの対応は根本的に不可能。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">トラフィックの急増・急減タイミングが事前に100%予測できている場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ 過去データを機械学習で分析する予測スケーリングポリシー</div>
+      <div class="ans-reason">過去パターンの繰り返しを前提とする仕組みであり、パターンにない突発的な負荷急増は予測しきれない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">定期的な週/日周期のトラフィック特性があり、起動に時間がかかるため事前に先読みしたい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「予測不能なタイミング」→事前定義の「スケジュール」や周期性依存の「予測」を除外し「動的（ターゲット追跡等）」を選ぶ</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1034</span><span class="qtheme">各AZ独立のNATゲートウェイ配置による障害局所化</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">各AZのパブリックサブネットにNATゲートウェイを1つずつ作成し、同じAZのプライベートサブネットのルートテーブルでそれぞれ対応するNAT GWに設定</div>
+      <div class="ans-reason">AZごとにNAT Gatewayを完全分離させることで、1つのAZがダウンしても他AZのインターネット通信に一切影響を与えない、耐障害性に優れたマルチAZの鉄板パターン。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ プライベートサブネットにEIP付きNATインスタンス(EC2)を起動</div>
+      <div class="ans-reason">NATインスタンスをプライベートサブネットに配置するとIGWと通信できず機能しない（配置場所の誤り）。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">各AZのパブリックサブネットに配置し、かつ運用管理の手間を許容する前提なら正解</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ 1つのAZにNAT GWを1つ作成し全プライベートサブネットから利用</div>
+      <div class="ans-reason">NAT GWが置かれた単一AZが障害に巻き込まれると、正常な他AZも含め全プライベートサブネットの通信が全滅（SPOF）する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">AZ障害時の可用性は度外視し、コストを最優先で最適化したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Egress-OnlyインターネットゲートウェイをVPCにアタッチ</div>
+      <div class="ans-reason">Egress-Only IGWは「IPv6専用」のコンポーネントであり、IPv4環境のルート・通信を処理することは技術的に不可能。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">VPCがIPv6で構成されており、IPv6アウトバウンド通信のみを許可したい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「AZ障害時にも他AZに影響を与えない」→NAT GW×1つを除外。NATインスタンスの配置場所とIPv6専用のEgress-Onlyの罠にも注意</div></div>
+  </div>
+
+  <div class="mnemo-card" style="background:var(--surface);border:1px dashed var(--blue);border-radius:10px;padding:12px;margin-top:4px;">
+    <div style="color:var(--blue);font-weight:700;font-size:12px;margin-bottom:6px;">🧠 このタブの共通鉄則</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.8;">
+      「予測不能」＝<strong style="color:var(--green)">動的スケーリング</strong>、「予測できる」＝スケジュール/予測スケーリング。この対比を必ず問題文から読み取る。<br>
+      NAT Gatewayは<strong style="color:var(--green)">1AZ1個が鉄則</strong>。1つに集約するとSPOFになる。
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB9: ストレージ共有 ===== -->
+<div class="section" id="s9">
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1018</span><span class="qtag2">2つ選択</span><span class="qtheme">Windows環境での静的アセット高速配信とサーバーサイドコード共有</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解（2つ）</div>
+      <div class="ans-main">① 静的アセットをS3+CloudFrontでエッジ配信<br>② スクリプトはFSx for Windows File Serverで共有</div>
+      <div class="ans-reason">静的コンテンツはCDNで高速化し、WindowsベースEC2群に対してはSMBプロトコルをネイティブサポートするFSxで一貫したコード共有を実現する最適設計。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ スクリプトをEFSに配置しNFSマウント</div>
+      <div class="ans-reason">EFSはLinux向けファイルシステム（NFS）であり、Windows ServerのEC2からはネイティブにマウントできない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">EC2のOSがLinuxベースで、複数インスタンス間のファイル共有を行いたい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ S3の前段にDynamoDB Accelerator(DAX)を配置</div>
+      <div class="ans-reason">DAXはDynamoDB専用のインメモリキャッシュであり、S3オブジェクト（HTTPベース）のキャッシュには一切使えない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">DynamoDBアプリでDBクエリの読取レイテンシーをマイクロ秒レベルに高速化したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ スクリプトをStorage Gatewayのファイルゲートウェイ経由でS3保存</div>
+      <div class="ans-reason">Storage Gatewayは主にオンプレとAWS間のハイブリッドストレージサービスであり、AWS内EC2間のリアルタイム共有目的には無駄な複雑性と遅延を生む。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">オンプレ環境からNFS/SMBでS3バケットへ直接バックアップ・移行したい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「Windows Serverベース」を見落としLinux向け「EFS」を選ばない。「キャッシュ」に釣られS3非対応の「DAX」も選ばない</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1037</span><span class="qtheme">オンプレミスとAWSから同時アクセス可能な分散ファイルシステム</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">EFSファイルシステムを作成し、各AZにマウントターゲットを配置してオンプレ・EC2両方からNFS接続</div>
+      <div class="ans-reason">NFSをネイティブサポートし、事前の容量プロビジョニングなしで自動スケールするLinux向け共有ストレージ。各AZへのマウントターゲット配置とVPN経由の接続で全要件を満たす最適設計。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ EBS io2ボリュームのマルチアタッチでクラスターファイルシステム構成</div>
+      <div class="ans-reason">EBSマルチアタッチは「同一AZ」内のEC2間でのみ共有可能で、複数AZ分散やオンプレからの直接マウントは不可能。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">同一AZ内の高性能Linuxインスタンス群でブロックストレージを共有し低レイテンシークラスタリングしたい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ S3バケット+s3fs-fuseでPOSIX互換ファイルシステムとしてマウント</div>
+      <div class="ans-reason">S3はオブジェクトストレージでNFSをネイティブサポートせず、FUSEツール経由ではPOSIX完全互換でないためファイルロック等に制限が生じる。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">NFS準拠やPOSIX互換は不要で、大量の静的ファイルを最安・容量無制限で共有したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ FSx for Windows File Serverをマルチ AZでデプロイしSMB接続</div>
+      <div class="ans-reason">FSx for WindowsはSMBプロトコルを使うWindows向けファイルシステムであり、Linux環境にネイティブNFS接続を提供しない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">接続元がWindows Server主体で、ADと連携したSMB共有をマルチAZ冗長化したい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「NFSプロトコル」＋「事前の容量プロビジョニング不要」→EBS/S3/FSxを全除外し「EFS」一択</div></div>
+  </div>
+
+  <div class="mnemo-card" style="background:var(--surface);border:1px dashed var(--blue);border-radius:10px;padding:12px;margin-top:4px;">
+    <div style="color:var(--blue);font-weight:700;font-size:12px;margin-bottom:6px;">🧠 このタブの共通鉄則</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.8;">
+      OS判定が最重要：<strong style="color:var(--green)">Linux→EFS(NFS)</strong> / <strong style="color:var(--green)">Windows→FSx for Windows(SMB)</strong>。<br>
+      「複数AZ・複数インスタンスからの同時共有」ときたらEBS(単一AZ限定)は基本的に除外される。
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB10: サーバーレス取込 ===== -->
+<div class="section" id="s10">
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1026</span><span class="qtheme">GPSトラッカーからの位置情報取り込みと管理負担の削減</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">Data Firehoseの配信ストリームを作成し、送信先をS3バケットに指定して車両データを自動的に蓄積する</div>
+      <div class="ans-reason">サーバーのプロビジョニングやスケーリングが一切不要なサーバーレス・フルマネージドサービスであり、標準機能だけでS3への自動配信・蓄積を最も少ない運用負荷で実現する最適設計。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Glueストリーミング ETLジョブでデータ変換しながらS3出力</div>
+      <div class="ans-reason">データ変換が不要な要件でジョブ定義やDPU管理、スキーマ設計を挟むのは過剰であり、不必要な複雑性とコストが発生する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">S3蓄積前にSparkによる高度なクレンジングや他データ結合をリアルタイムに行いたい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ MSKクラスターを構築しKafka Connect経由でS3へ書き出し</div>
+      <div class="ans-reason">クラスターのブローカー数やストレージ管理、Connectorの監視などインフラ寄りの運用オーバーヘッドが大幅に増加する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">既にKafkaエコシステムが構築済みで、超高スループット・マルチコンシューマー構成に統合したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ EC2上にFluentdを導入し定期的にS3へアップロード</div>
+      <div class="ans-reason">OS管理・パッチ適用・プロセス監視やスケーリング設計を自前で行う必要があり、運用負荷が最大になるアンチパターン。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">既存のオンプレ構成がEC2+Fluentdで固定され、運用資産をそのまま流用したい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「管理の手間をできるだけ少なく」→MSK/Glue/EC2の管理系を即除外し「Data Firehose」を選ぶ</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1035</span><span class="qtheme">AWS Transfer FamilyとS3+Lambdaによるイベント駆動処理</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">Transfer FamilyでFTPエンドポイントを構成しS3標準へ直接格納。オブジェクト作成のS3イベント通知でLambdaをトリガーし変換処理と削除を実行</div>
+      <div class="ans-reason">サーバーレス・フルマネージドのみで構成され、ファイル受信と同時に即時イベント駆動で処理が走るため、運用負荷を最小にしつつ要件を満たすベストプラクティス。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ EC2上にFTPサーバー構築+EFS保存+15分ごとのAWS Batch起動</div>
+      <div class="ans-reason">EC2やEFSのインフラ運用保守コストが発生する上、15分ごとのスケジュール実行では「すぐに」処理を開始する即時性の要件を満たせない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">数時間に1回の定期的なまとめ処理で問題なく、既存のバッチ基盤をそのまま移行したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ EC2上にFTPサーバー構築+Glacier Instant Retrieval+1時間ごとStep Functions起動</div>
+      <div class="ans-reason">1時間ごとの定期実行ではリアルタイム性に欠け、低頻度アクセス向けGlacierから即時削除を繰り返すと早期削除料金等の無駄なコストが増大する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">変換処理は1時間に1回で十分で、データも低頻度アクセスかつ長期保管したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Transfer Family+S3+SQS経由でEC2ワーカーが処理</div>
+      <div class="ans-reason">変換処理を担うEC2インスタンスのOS管理・パッチ適用・スケーリングなどの運用管理負荷が常時発生する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">変換処理に15分（Lambda制限）以上かかる、または大量ファイルをキューでバッファリングしながらサーバー処理したい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「運用負荷を最小化」＋「受信後すぐに処理開始」→EC2構築やスケジュール実行を除外し「Transfer Family+S3+Lambda」を選ぶ</div></div>
+  </div>
+
+  <div class="mnemo-card" style="background:var(--surface);border:1px dashed var(--blue);border-radius:10px;padding:12px;margin-top:4px;">
+    <div style="color:var(--blue);font-weight:700;font-size:12px;margin-bottom:6px;">🧠 このタブの共通鉄則</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.8;">
+      「サーバー管理不要」「即時処理」ときたら<strong style="color:var(--green)">Data Firehose</strong>（ストリーム取込）や<strong style="color:var(--green)">S3イベント+Lambda</strong>（即時トリガー）が定番。<br>
+      EC2・自前クラスター(MSK)・スケジュール実行が出てきたら、大抵は過剰設計または要件不一致で不正解。
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB11: 分野3 MAP ===== -->
+<div class="section" id="s11">
+  <div class="card">
+    <div class="card-header"><span class="card-title">📋 分野3: 高パフォーマンスなアーキテクチャの設計（10問）</span></div>
+    <div class="idx-row"><div class="idx-id">1009</div><div class="idx-text">大容量AMI起動のEBS遅延解消 → <strong style="color:var(--green)">高速スナップショット復元(FSR)</strong><span class="idx-tag">頻出</span></div></div>
+    <div class="idx-row"><div class="idx-id">1012</div><div class="idx-text">複数アカウントの構成可視化 → <strong style="color:var(--green)">Workload Discovery on AWS</strong></div></div>
+    <div class="idx-row"><div class="idx-id">1014</div><div class="idx-text">Windows SMB共有ストレージ → <strong style="color:var(--green)">FSx for Windows File Server</strong></div></div>
+    <div class="idx-row"><div class="idx-id">1019</div><div class="idx-text">DynamoDB読取マイクロ秒化 → <strong style="color:var(--green)">DAX</strong><span class="idx-tag">頻出</span></div></div>
+    <div class="idx-row"><div class="idx-id">1028</div><div class="idx-text">大量画像アップロードの負荷分散 → <strong style="color:var(--green)">S3署名付きURLで直接アップロード</strong><span class="idx-tag">頻出</span></div></div>
+    <div class="idx-row"><div class="idx-id">1032</div><div class="idx-text">EBS I/O性能不足の解消 → <strong style="color:var(--green)">複数io1をRAID 0でストライピング</strong></div></div>
+    <div class="idx-row"><div class="idx-id">1033</div><div class="idx-text">帯域制限下での大容量S3移行 → <strong style="color:var(--green)">AWS Snowball</strong><span class="idx-tag">頻出</span></div></div>
+    <div class="idx-row"><div class="idx-id">1036</div><div class="idx-text">1分間隔メトリクス取得 → <strong style="color:var(--green)">CloudWatch詳細モニタリング</strong></div></div>
+    <div class="idx-row"><div class="idx-id">1043</div><div class="idx-text">PB規模の画像配信 → <strong style="color:var(--green)">S3 + CloudFront</strong></div></div>
+    <div class="idx-row"><div class="idx-id">1056</div><div class="idx-text">TCP/UDPゲームの低遅延化 → <strong style="color:var(--green)">Global Accelerator</strong><span class="idx-tag">頻出</span></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">🎯 分野3 共通鉄則パターン</span></div>
+    <table class="tbl">
+      <tr><th>ひっかけ表現</th><th>反応パターン</th></tr>
+      <tr><td><span class="kw ky">大容量ボリューム・AMI</span></td><td>lazy loading（遅延読込）の罠 → <strong style="color:var(--green)">高速スナップショット復元(FSR)</strong></td></tr>
+      <tr><td><span class="kw kr">単一ボリュームの性能上限</span></td><td>ボリューム変更だけでは越えられない → <strong style="color:var(--green)">RAID 0でストライピング</strong></td></tr>
+      <tr><td><span class="kw kp">コード変更を最小限にマイクロ秒化</span></td><td>自前キャッシュロジックは除外 → <strong style="color:var(--green)">DAX（API互換）</strong></td></tr>
+      <tr><td><span class="kw kg">サーバー負荷を最小限にアップロード</span></td><td>中継サーバー方式は除外 → <strong style="color:var(--green)">S3署名付きURLで直接アップロード</strong></td></tr>
+      <tr><td><span class="kw">帯域制限×期限が短い×大容量</span></td><td>オンライン転送は全滅 → <strong style="color:var(--green)">Snowball（オフライン物理転送）</strong></td></tr>
+      <tr><td><span class="kw kr">TCP/UDP両方＋低遅延</span></td><td>HTTP専用サービス(CloudFront/ALB/API GW)は除外 → <strong style="color:var(--green)">Global Accelerator</strong></td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ===== TAB12: EBS・ストレージ性能 ===== -->
+<div class="section" id="s12">
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1009</span><span class="qtheme">大容量AMIからの起動時におけるEBS初期化遅延の解消</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">AMIの基となるEBSスナップショットに対し高速スナップショット復元(FSR)を該当AZで有効化し、起動テンプレートを更新</div>
+      <div class="ans-reason">大容量ボリュームで発生するS3からの遅延読み込み（lazy loading）によるI/O性能低下を、事前初期化（プリウォーミング）によって完全に排除する最適設計。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ EBSをio2 Block Expressに変更しプロビジョンドIOPSを最大化</div>
+      <div class="ans-reason">最高性能のディスクを用意しても、初回アクセス時のlazy loadingという根本原因は解決できず、莫大な無駄コストが発生する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">既に初期化完了済みのボリュームに対し常時超高I/O性能を要求する場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ インスタンスストア + ユーザーデータでAMIデータをコピー</div>
+      <div class="ans-reason">起動のたびに大容量データをスクリプトでコピーすることになり、起動完了までに膨大な時間がかかり逆効果。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">永続性が不要な一時スクラッチ領域として超高速ブロックストレージを使いたい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ ウォームプールで停止状態のインスタンスを保持</div>
+      <div class="ans-reason">停止しているインスタンスもlazy loadingの問題は引き継がれ、ディスク性能低下は根本解決しない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">ディスクI/Oではなくアプリ自体の初期化（ミドルウェア起動等）に時間がかかる場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「100GB以上の大容量AMI」＋「スケールアウト時のI/O安定化」→EBS特有の"lazy loading"の罠。FSR一択</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1032</span><span class="qtheme">Oracleデータベースの EBS I/O 性能不足の解消</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">io1 EBSボリュームを複数アタッチし、OSレベルでRAID 0（ストライピング）を構成してI/Oを分散</div>
+      <div class="ans-reason">単一io1ボリュームには最大スループット上限（1,000MB/s）があるため、複数ボリュームでストライピングし並列処理させ限界を突破する最適設計。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ インスタンスタイプをi3enに変更しNVMeインスタンスストアを使用</div>
+      <div class="ans-reason">インスタンスストアは揮発性であり、停止・終了でデータが消失するため、永続性必須のOracleデータ領域には使えない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">永続性が不要な一時キャッシュ領域として使いたい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ io1ボリュームの容量を4TBへ拡張</div>
+      <div class="ans-reason">io1は容量とIOPSが独立してプロビジョニングされる仕様であり、容量拡張だけではスループット上限は越えられない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">gp2を使用しており容量拡張と同時にベースラインIOPSも向上させたい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ io1をio2 Block Expressへ変換し256,000 IOPSをプロビジョニング</div>
+      <div class="ans-reason">ボリューム単体の性能を上げても、EC2インスタンス側のEBS最適化帯域幅の上限を突破することはできない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">インスタンス側の帯域幅に十分余裕があり単一ボリュームとして超巨大IOPSをプロビジョニングしたい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「単一io1のスループット上限」「EC2ごとのEBS帯域幅制限」→OS側から力技で並列化する「RAID 0」一択</div></div>
+  </div>
+
+  <div class="mnemo-card" style="background:var(--surface);border:1px dashed var(--green);border-radius:10px;padding:12px;margin-top:4px;">
+    <div style="color:var(--green);font-weight:700;font-size:12px;margin-bottom:6px;">🧠 このタブの共通鉄則</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.8;">
+      「起動時の遅延」→<strong style="color:var(--green)">FSR</strong>、「稼働中の性能上限」→<strong style="color:var(--green)">RAID 0ストライピング</strong>。<br>
+      どちらも「もっと良いボリュームタイプに変える」という選択肢がひっかけとして用意されがちだが、根本原因（lazy loading/単一ボリューム上限）を解決しない点を見抜く。
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB13: キャッシュ・DB高速化 ===== -->
+<div class="section" id="s13">
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1019</span><span class="qtheme">DynamoDB読取のマイクロ秒化とコード変更の最小化</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">DynamoDBの前段にDAXクラスターを配置し、アプリの接続先をDAXエンドポイントに切り替える</div>
+      <div class="ans-reason">DynamoDBとAPI互換のクライアントライブラリにより、自前キャッシュ管理ロジックの実装を回避し、接続先変更のみでミリ秒→マイクロ秒への劇的な性能向上を実現。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ ElastiCache for Memcachedを構築しキャッシュロジックをアプリに実装</div>
+      <div class="ans-reason">性能は向上するが、キャッシュのヒット/ミス判定や無効化ロジックを自前実装する必要があり「コード影響最小化」を満たせない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">DynamoDB以外の複数データソースを柔軟にキャッシュしたく、コード書き換えコストを許容できる場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ DynamoDBグローバルテーブルで複数リージョンにレプリケーション</div>
+      <div class="ans-reason">地理的なリージョン間遅延は減らせるが、同一リージョン内の読み取りレイテンシーそのものをマイクロ秒に下げる効果はない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">世界各地のユーザーに近いリージョンから提供しつつマルチリージョンDR体制を整えたい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ キャパシティモードをオンデマンドに変更</div>
+      <div class="ans-reason">オンデマンドはスループットの自動調整であり、リクエスト自体のレスポンスレイテンシーはミリ秒水準のまま変わらない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">予測不能なトラフィックスパイクに対しキャパシティ管理を一切行わず運用したい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「アプリコードへの影響を最小化」＋「可能な限り低いレイテンシー」→自前ロジックが必要なElastiCacheを除外し、API互換で透過的な「DAX」を選ぶ</div></div>
+  </div>
+
+  <div class="mnemo-card" style="background:var(--surface);border:1px dashed var(--green);border-radius:10px;padding:12px;margin-top:4px;">
+    <div style="color:var(--green);font-weight:700;font-size:12px;margin-bottom:6px;">🧠 このタブの共通鉄則</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.8;">
+      「DynamoDB＋マイクロ秒＋コード変更最小」の3点セットが揃ったら<strong style="color:var(--green)">DAX</strong>一択。<br>
+      ElastiCacheは「どのDBにも使える汎用キャッシュだが自前ロジックが必要」という位置づけで区別する。
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB14: 配信・ネットワーク ===== -->
+<div class="section" id="s14">
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1043</span><span class="qtheme">ペタバイト規模の画像配信の最適化とグローバル低遅延化</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">画像をS3に格納し、CloudFrontディストリビューション経由で配信する</div>
+      <div class="ans-reason">事実上容量無制限でPB規模に対応できるS3と、世界中のエッジロケーションでミリ秒単位の超高速配信を実現するCloudFrontを組み合わせた、静的コンテンツ配信の王道アーキテクチャ。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Glacier Instant Retrieval + ElastiCache</div>
+      <div class="ans-reason">Glacier Instant Retrievalは低頻度アクセス向けで取り出し料金が莫大になる。ElastiCacheは構造化データ向けで巨大画像ファイルのCDN用途には不向き。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">数ヶ月に一度しかアクセスされないアーカイブデータをVPC内から低レイテンシーで参照したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ EFS + ALBのキャッシュ機能</div>
+      <div class="ans-reason">EFSはS3よりGB単価が約10倍高額。またALBにはそもそもコンテンツキャッシュ機能自体が存在しない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">複数LinuxサーバーでPOSIX互換ファイルシステムを共有し、ALBで負荷分散したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ EBSボリューム格納のEC2からCloudFrontオリジンとして配信</div>
+      <div class="ans-reason">EBSは単一ボリューム上限64TiBであり、PB規模には多数のボリューム・サーバー管理が必要になり運用負荷が最大化する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">画像容量が数十TiB程度で、配信前にオリジン側で動的な画像変換処理を行いたい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「PB規模」＋「世界中へ高速配信」→EFS/EBSを容量・拡張性の観点で除外し「S3+CloudFront」の鉄板コンビ</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1056</span><span class="qtheme">TCPとUDPを用いるリアルタイム対戦ゲームのグローバル低遅延化</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">Global Acceleratorを導入し各リージョンのNLBをエンドポイントとして登録、ゲーム用ポートのリスナーを構成</div>
+      <div class="ans-reason">AWSのプライベートグローバルバックボーンを経由させることでホップ数を減らし、TCP/UDP両方でレイテンシー・パケットロスを最小化する最適設計。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ CloudFrontをNLBの前段に配置しキャッシュTTLを最適化</div>
+      <div class="ans-reason">CloudFrontはHTTP/HTTPS（レイヤー7）専用のCDNであり、生のTCPソケット通信やUDPトラフィックをサポートしない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">通信プロトコルがHTTP/HTTPSのみに限定され静的/動的コンテンツを配信したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ API GatewayでWebSocket API処理+Route53ヘルスチェック</div>
+      <div class="ans-reason">API GatewayもHTTPまたはWebSocket（TCPベース）専用であり、UDPトラフィックを処理できない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">UDP通信は不要で双方向WebSocket基盤をフルマネージドで構築したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ NLBをALBに変更しパスベースルーティング</div>
+      <div class="ans-reason">ALBはHTTP/HTTPS及びgRPC専用のロードバランサーであり、UDPトラフィックを受信・負荷分散できない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">HTTP/HTTPSのURLパスに基づき複数マイクロサービスへ振り分けたい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「TCPとUDPの両方」＋「低遅延」→HTTP専用のCloudFront/API Gateway/ALBを全除外し「Global Accelerator」一択</div></div>
+  </div>
+
+  <div class="mnemo-card" style="background:var(--surface);border:1px dashed var(--green);border-radius:10px;padding:12px;margin-top:4px;">
+    <div style="color:var(--green);font-weight:700;font-size:12px;margin-bottom:6px;">🧠 このタブの共通鉄則</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.8;">
+      静的コンテンツ配信＝<strong style="color:var(--green)">S3+CloudFront</strong>。TCP/UDPの低レイヤー通信＝<strong style="color:var(--green)">Global Accelerator</strong>。<br>
+      「HTTP専用」か「レイヤー4（TCP/UDP対応）」かをまず見極めるのが最速の判定軸。
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB15: 移行・アップロード ===== -->
+<div class="section" id="s15">
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1028</span><span class="qtheme">チケット購入時の本人確認書類アップロード負荷分散</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">バックエンドAPIでS3の署名付きURLを発行し、クライアントがそのURLでS3へ直接画像を送信する</div>
+      <div class="ans-reason">アプリケーションサーバーを大容量データ転送処理から完全に解放し、サーバーレスかつ高いスケーラビリティで数万件の同時アップロードを裁ける最適設計。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ DataSyncエージェントを中継サーバーに導入</div>
+      <div class="ans-reason">DataSyncは主にNFS/SMBを前提としたバッチ的な同期ツールであり、ブラウザからのHTTPアップロードには適合せず、中継サーバー自体がボトルネックになる。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">オンプレのファイルサーバーの大量既存画像資産を数日かけて一括同期・移行したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ CloudFrontのオリジンにEBS付きEC2を配置しアップロード受付</div>
+      <div class="ans-reason">CloudFrontは主にダウンロード（配信）で真価を発揮し、アップロードデータがEC2/EBSのI/O上限に直撃してボトルネックになる。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">アップロードではなく動的/静的コンテンツを世界中に高速配信したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ アプリサーバーが受信後にS3保存+ASGでサーバー台数調整</div>
+      <div class="ans-reason">大容量データを2段階で中継することになり、ASGの起動が間に合わない突発スパイクでメモリ・帯域が枯渇してパンクする。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">同時アップロード数が限定的で、S3格納前にサーバー側でバリデーション・即時加工が必要な場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「サーバー負荷を最小限」＋「最もスケーラブル」→データをサーバーに通さない「S3署名付きURL」直接アップロードの一択</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1033</span><span class="qtheme">大容量データのネットワーク帯域制限下での迅速なS3移行</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">AWS Snowballデバイスを注文し、オンプレでデータをロードした後AWSへ返送してS3にインポートする</div>
+      <div class="ans-reason">物理デバイスによるオフライン転送により、既存回線を一切圧迫せず、制限時間（4週間）以内に大容量データを安全確実に移行できる最適設計。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Direct Connectの1Gbps専用接続をプロビジョニング</div>
+      <div class="ans-reason">専用線の敷設・開通には通常数週間〜数ヶ月のリードタイムを要し、「4週間以内」という期限に間に合わない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">移行期限に数ヶ月以上の猶予があり、継続的な専用ネットワーク通信が必要な場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ DataSyncエージェントで既存のインターネット回線経由でS3へ同期</div>
+      <div class="ans-reason">帯域を絞ると実効スループットが低すぎて、期限内に完遂できない（計算上200日以上かかる等）。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">回線が十分太い、またはデータ量が小さく数日〜数週間でオンライン同期が完了する場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ S3マルチパートアップロード + Transfer Acceleration</div>
+      <div class="ans-reason">Transfer AccelerationはAWS内部ネットワークに入った後の通信高速化であり、拠点側の物理的な上り回線の細さという根本ボトルネックは解消できない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">拠点側の帯域には余裕があるが、S3バケットが地理的に遠く長距離遅延を解決したい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「4週間以内」＋「帯域使用率60%以下」→実効スループットを計算するとオンライン転送は全滅。「Snowball」一択</div></div>
+  </div>
+
+  <div class="mnemo-card" style="background:var(--surface);border:1px dashed var(--green);border-radius:10px;padding:12px;margin-top:4px;">
+    <div style="color:var(--green);font-weight:700;font-size:12px;margin-bottom:6px;">🧠 このタブの共通鉄則</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.8;">
+      「サーバーを通さない」がキーワードなら<strong style="color:var(--green)">署名付きURL</strong>。「帯域制限×期限が短い」なら実効スループットを計算し、足りなければ<strong style="color:var(--green)">Snowball（物理輸送）</strong>。
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB16: 監視・可視化・共有FS ===== -->
+<div class="section" id="s16">
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1012</span><span class="qtheme">AWS Organizations環境での複数アカウントのリソース構成・依存関係の可視化</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">Workload Discovery on AWSをデプロイし、対象アカウントのリソースを自動検出してアーキテクチャ図を生成する</div>
+      <div class="ans-reason">複数アカウント・複数リージョンにまたがるリソースの関係性を自動スキャンし、Web UI上でインタラクティブな構成図として自動生成できる専用ソリューション。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Config アグリゲータ + QuickSightダッシュボード</div>
+      <div class="ans-reason">Configアグリゲータはリソース一覧化はできるが依存関係のマッピング機能はなく、QuickSightもBIツールでアーキテクチャ図の自動生成はできない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">設定変更履歴やコンプライアンス準拠状況をダッシュボードで集計したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ CloudTrailイベント分析+手動でアーキテクチャ図作成</div>
+      <div class="ans-reason">CloudTrailは過去のAPI監査ログであり、現在のリソース状態抽出は困難な上、手動製図は「最小限の手作業」要件に反する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">特定リソースの作成・変更操作履歴を遡って監査調査したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Amazon Inspectorでネットワーク到達可能性レポートから関係図作成</div>
+      <div class="ans-reason">Inspectorは脆弱性スキャン・ネットワーク到達性検証サービスで対応リソースも限定的。インフラ構成図の自動生成機能はない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">EC2等が意図しない経路でアクセス可能になっていないか診断したい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「最小限の手作業」＋「依存関係を可視化したアーキテクチャ図」→専用ツール「Workload Discovery on AWS」一択</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1014</span><span class="qtheme">Windows環境でのSMB共有ファイルストレージと運用負荷の最小化</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">FSx for Windows File Serverを作成し、SMBを通じて各アプリサーバーから接続する</div>
+      <div class="ans-reason">Windows Serverベースのフルマネージドサービスであり、SMBをネイティブサポートするため最も少ない運用負荷で共有ストレージを実現する最適設計。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ EFSファイルシステムをNFSマウント経由で接続</div>
+      <div class="ans-reason">EFSはLinux向けファイルシステム（NFS）であり、Windows環境でのSMBアクセス要件を満たせない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">アプリサーバーがLinuxベースでNFSプロトコルによる共有をしたい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ EC2にSambaサーバーを構築しEBSをバックエンドに</div>
+      <div class="ans-reason">技術的には可能だが、OSパッチ・Samba設定・冗長化を全て自前管理する必要があり運用負荷が大幅増加する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">既存のオンプレSamba資産をそのままEC2上にセルフ管理で移行したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Storage Gatewayのボリュームゲートウェイでiscsi接続</div>
+      <div class="ans-reason">ボリュームゲートウェイはiSCSIブロックストレージを提供するものであり、SMBファイル共有の用途には適合しない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">オンプレサーバーにiSCSI経由でブロックストレージを提供しS3にバックアップしたい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「Windowsベース」＋「SMB」＋「運用負荷最小」→Linux向けEFSや自前管理EC2+Sambaを除外し「FSx for Windows」一択</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1036</span><span class="qtheme">EC2標準メトリクスの1分間隔把握と運用負荷の最小化</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">各EC2でCloudWatch詳細モニタリングを有効化し、1分間隔のメトリクスをダッシュボード/アラームで分析する</div>
+      <div class="ans-reason">インフラ構築やエージェント導入を一切行わず、設定変更のみで1分間隔の標準メトリクス収集を実現できる、運用オーバーヘッドが最も低いベストプラクティス。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ cronジョブで収集しS3保存+Athenaでクエリ</div>
+      <div class="ans-reason">インスタンスごとの自作スクリプト管理の手間が発生し、リアルタイムの可視化・アラーム通知には非常に不向き。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">標準メトリクスにない独自アプリ内部データをバッチで長期分析したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ CloudWatchエージェント+Firehose+OpenSearchで可視化</div>
+      <div class="ans-reason">標準メトリクス取得だけの要件に対し、大規模ストリーミングパイプラインや検索クラスターの構築は過剰設計。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">OS内部の詳細ログを数百万台規模から高スループットで集約・分析したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Systems Manager Run Command + DynamoDB + QuickSight</div>
+      <div class="ans-reason">Run Commandは単発/定期的な管理タスク用ツールで継続的な監視基盤として設計されておらず、3サービス連携の運用の手間が悪い。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">リアルタイム監視は不要で、定期的な管理コマンド結果をBIツールでレポート化したい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「1分間隔」＋「運用オーバーヘッド最小」→余計なツール・エージェント導入を伴う選択肢を除外し「詳細モニタリング」一択</div></div>
+  </div>
+
+  <div class="mnemo-card" style="background:var(--surface);border:1px dashed var(--green);border-radius:10px;padding:12px;margin-top:4px;">
+    <div style="color:var(--green);font-weight:700;font-size:12px;margin-bottom:6px;">🧠 このタブの共通鉄則</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.8;">
+      「可視化・監視系」で運用負荷最小が求められたら、まず<strong style="color:var(--green)">AWS公式のマネージドソリューション</strong>（詳細モニタリング、Workload Discovery）を疑う。<br>
+      複数サービスを組み合わせる選択肢は大抵オーバーエンジニアリングで不正解。
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB17: 分野4 MAP ===== -->
+<div class="section" id="s17">
+  <div class="card">
+    <div class="card-header"><span class="card-title">📋 分野4: コスト最適化されたアーキテクチャの設計（10問）</span></div>
+    <div class="idx-row"><div class="idx-id">1001</div><div class="idx-text">気象データ即時変換+長期保存(2択) → <strong style="color:var(--green)">Lambda ＋ Glacier Flexible+30日削除</strong><span class="idx-tag">2択</span></div></div>
+    <div class="idx-row"><div class="idx-id">1007</div><div class="idx-text">物理テープのクラウド移行 → <strong style="color:var(--green)">Storage Gateway Tape Gateway</strong></div></div>
+    <div class="idx-row"><div class="idx-id">1010</div><div class="idx-text">混在アクセス頻度+規制データ保存 → <strong style="color:var(--green)">Intelligent-Tiering＋Glacier Deep Archive</strong><span class="idx-tag">頻出</span></div></div>
+    <div class="idx-row"><div class="idx-id">1011</div><div class="idx-text">軽量ドキュメント変換の即時処理 → <strong style="color:var(--green)">S3イベント→SQS→Lambda</strong></div></div>
+    <div class="idx-row"><div class="idx-id">1013</div><div class="idx-text">変動負荷RDBのコスト最適化 → <strong style="color:var(--green)">Aurora Serverless</strong><span class="idx-tag">頻出</span></div></div>
+    <div class="idx-row"><div class="idx-id">1015</div><div class="idx-text">週次バッチのASG自動化 → <strong style="color:var(--green)">予測スケーリング+事前起動</strong></div></div>
+    <div class="idx-row"><div class="idx-id">1016</div><div class="idx-text">OSレベルアクセス必要なOracle移行 → <strong style="color:var(--green)">RDS Custom for Oracle</strong></div></div>
+    <div class="idx-row"><div class="idx-id">1020</div><div class="idx-text">600TB大量データ期限内移行 → <strong style="color:var(--green)">Snowball Edge+Glacier Deep Archive</strong></div></div>
+    <div class="idx-row"><div class="idx-id">1041</div><div class="idx-text">EC2クロスリージョンバックアップ一元管理 → <strong style="color:var(--green)">AWS Backup</strong></div></div>
+    <div class="idx-row"><div class="idx-id">1042</div><div class="idx-text">EC2+Lambda混在コスト+低遅延 → <strong style="color:var(--green)">Compute Savings Plans+同一サブネット</strong><span class="idx-tag">頻出</span></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">🎯 分野4 共通鉄則パターン</span></div>
+    <table class="tbl">
+      <tr><th>ひっかけ表現</th><th>反応パターン</th></tr>
+      <tr><td><span class="kw ky">アクセス頻度が混在/予測不能</span></td><td>固定ライフサイクルルールは除外 → <strong style="color:var(--green)">Intelligent-Tiering</strong></td></tr>
+      <tr><td><span class="kw kr">スケジュールは事前に把握できる</span></td><td>即時取り出し不要と判断 → <strong style="color:var(--green)">Glacier Flexible/Deep Archive</strong></td></tr>
+      <tr><td><span class="kw kp">トラフィック変動+RDB+従量課金</span></td><td>固定インスタンスのRDS/DynamoDBは除外 → <strong style="color:var(--green)">Aurora Serverless</strong></td></tr>
+      <tr><td><span class="kw kg">EC2とLambdaの両方をカバー</span></td><td>EC2 Instance Savings Plansは除外 → <strong style="color:var(--green)">Compute Savings Plans</strong></td></tr>
+      <tr><td><span class="kw">週/日ごとの周期的変動＋事前準備</span></td><td>ターゲット追跡（リアクティブ）は除外 → <strong style="color:var(--green)">予測スケーリング</strong></td></tr>
+      <tr><td><span class="kw kr">既存ソフト/運用手順を変更したくない</span></td><td>プラグイン導入や作り直しは除外 → <strong style="color:var(--green)">Storage Gateway等の互換インターフェース</strong></td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ===== TAB18: ストレージ階層化 ===== -->
+<div class="section" id="s18">
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1001</span><span class="qtag2">2つ選択</span><span class="qtheme">農業テック企業における気象データの即時変換と長期保存のコスト最適化</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解（2つ）</div>
+      <div class="ans-main">① CSVのS3 PUTをトリガーにLambdaでチャート画像に変換し同バケットの別プレフィックスへ出力<br>② CSVは1日後にGlacier Flexible Retrievalへ移行、画像は30日後に自動削除</div>
+      <div class="ans-reason">サーバーレスで即座に変換を実現し、スケジュールが事前に分かっているためGlacier Flexible（最安級）への即時退避で最もコスト効率が高い。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ 1日後にOne Zone-IAへ移行</div>
+      <div class="ans-reason">One Zone-IAはGlacier Flexibleより保存単価が約3倍高く、即時取り出しが不要な本要件ではコスト最適にならない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">なし（このシナリオでは常に不正解）</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ EC2スポット+5分間隔ポーリング</div>
+      <div class="ans-reason">5分間隔のバッチ処理ではデータ到着から最大5分のタイムラグが生じ「即座に変換」を満たせない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">なし（即時性要件と矛盾するため常に不正解）</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ チャート画像をReduced Redundancy Storage(RRS)で保持</div>
+      <div class="ans-reason">RRSは非推奨の古いストレージクラスであり、Standardより割高で耐久性も低い。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">なし（現行のAWS試験に正解パターンは存在しない）</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「即座に変換」＋「スケジュールは事前把握可能」→EC2スポット(遅延)を除外しLambda、Glacier Flexibleを選ぶ</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1010</span><span class="qtheme">アクセス頻度が混在する大量データと規制データの長期保存のコスト最適化</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">S3 Intelligent-Tieringに格納しアクセス頻度に応じ自動階層移動、1年経過後Glacier Deep Archiveへライフサイクル遷移</div>
+      <div class="ans-reason">頻繁アクセスと低頻度アクセスが混在するデータの両方を、ミリ秒未満の取得レイテンシーを維持しつつ自動で最適な層に振り分け、取得料金も発生しない最適設計。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ 7日後にStandard-IA、1年後にDeep Archiveへ固定ライフサイクル</div>
+      <div class="ans-reason">四半期分析での大量取り出し時に莫大な取得料金が発生し、数兆件のオブジェクトへの移行リクエスト料金も膨大になる。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">取得料金がかかっても問題なく、アクセスパターンが完全に予測可能な場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ 最初からStandard-IAに格納、1年後Glacier Flexibleへ移行</div>
+      <div class="ans-reason">直近の日次アクセスデータにも毎回取得料金が発生しコストが跳ね上がる。長期保管にFlexibleを選ぶのも非効率。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">日次アクセス要件がなく、規制データも3〜5時間で取り出せれば良い場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ 7日後にOne Zone-IA、1年後にDeep Archiveへ移行</div>
+      <div class="ans-reason">取得料金・移行リクエスト料金の課題に加え、One Zone-IAは単一AZ保管のため重要データ消失リスクがある。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">データ消失リスクを許容してでもストレージ単価を極限まで削りたい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「数兆件」＋「即座に取得」＋「ほとんど参照されない規制データ」→固定ルールは破綻。Intelligent-Tiering＋Deep Archiveの組み合わせ</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1020</span><span class="qtheme">大量アーカイブデータの移行期限内完了と長期保管コストの最小化</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">複数のSnowball Edge Storage Optimizedデバイスでオンプレデータを取り込みS3へ格納後、ライフサイクルでGlacier Deep Archiveへ階層化</div>
+      <div class="ans-reason">ネットワーク帯域に依存しない物理デバイス転送により、期限（30日）以内に600TBの大容量データを確実に移行し、最安のストレージクラスで長期保管する最適設計。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ DataSync+既存回線でGlacier Deep Archiveへ直接転送</div>
+      <div class="ans-reason">500Mbps回線をフル活用しても600TBの転送に約111日以上かかり、30日の期限を大幅に超過する。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Direct Connect(1Gbps)+Transfer Accelerationを併用</div>
+      <div class="ans-reason">専用線の敷設に数週間〜数ヶ月かかり期限に間に合わない上、1Gbpsでも約55日以上かかる。DC経由の通信にTransfer Accelerationは適用不可。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Storage Gatewayファイルゲートウェイ+Standard-IA→Glacier Flexible</div>
+      <div class="ans-reason">既存回線でのアップロードは期限内に完了しない上、最終保管先がDeep Archiveより約4倍高価なFlexible Retrievalでコスト最小化の要件も満たさない。</div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「600TB」「500Mbps」「30日間」→データ量と帯域から所要時間を計算するとオンライン転送は全滅。Snowball Edge一択</div></div>
+  </div>
+
+  <div class="mnemo-card" style="background:var(--surface);border:1px dashed var(--orange);border-radius:10px;padding:12px;margin-top:4px;">
+    <div style="color:var(--orange);font-weight:700;font-size:12px;margin-bottom:6px;">🧠 このタブの共通鉄則</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.8;">
+      「アクセスパターンが予測可能」→固定ライフサイクルでOK。「予測不能・混在」→<strong style="color:var(--green)">Intelligent-Tiering</strong>。<br>
+      大容量×短期限のオンライン転送は必ず「データ量÷帯域」を計算する癖をつける。答えが出ないなら<strong style="color:var(--green)">Snowball系</strong>。
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB19: コンピュート課金 ===== -->
+<div class="section" id="s19">
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1013</span><span class="qtheme">変動負荷におけるリレーショナルデータベースのコスト最適化</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">Aurora Serverlessを採用し、トラフィックに応じてコンピューティングキャパシティを自動調整</div>
+      <div class="ans-reason">ACU（Aurora Capacity Unit）が自動でスケール上下し使った分だけの従量課金となるため、RDB要件とコスト最小化を両立できる最適設計。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ RDS for PostgreSQL(gp2)+手動リードレプリカ追加</div>
+      <div class="ans-reason">固定サイズのインスタンス・レプリカは常時起動コストが発生し、アイドル時にも無駄な費用がかかる。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">トラフィックがほぼ一定で予測可能な場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ RDS for MySQLマルチAZ+io1ストレージ</div>
+      <div class="ans-reason">インスタンス料金に加えプロビジョニングIOPSの固定費用が常時発生し、変動トラフィックにコスト効率が悪い。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">コスト度外視で常に高可用性・高I/Oが必要なエンタープライズ要件の場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ DynamoDBオンデマンド+リレーショナルモデルを再現</div>
+      <div class="ans-reason">DynamoDBはNoSQLであり「リレーショナルDBが必要」という要件に反し、複雑な設計が必要になる。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">リレーショナル要件が不要で完全従量課金のキーバリューストアで良い場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「RDB」＋「トラフィック大きく変動」＋「使った分だけ課金」→固定費のRDSとNoSQLのDynamoDBを除外し「Aurora Serverless」一択</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1042</span><span class="qtheme">EC2とLambdaが混在するシステムのコスト最適化と低遅延化</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">EC2/Lambda双方をカバーするCompute Savings Plansを契約。Lambda側はメモリ・実行時間等を精査。EC2稼働のプライベートサブネットにLambdaを接続しVPC内部通信を確保</div>
+      <div class="ans-reason">両方に横断的に割引が適用されるCompute Savings Plansを選び、同一VPC内配置でHyperplane ENI経由の直接通信によりコスト削減と低遅延を両立する最適設計。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ EC2 Instance Savings Plans + Lambdaを同一プライベートサブネットに配置</div>
+      <div class="ans-reason">EC2 Instance Savings PlansはEC2にしか割引が適用されず、Lambda利用料金の割引が得られない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">Lambdaの利用が極めて少なく実質EC2のみのコスト最適化で十分な場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ EC2 Instance Savings Plans + Lambdaをパブリックサブネットに配置</div>
+      <div class="ans-reason">Lambda割引が得られない上、パブリックサブネット配置はセキュリティ・レイテンシー面で非効率。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">なし（この構成が優位になるケースはない）</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Compute Savings Plans + LambdaをVPC外(デフォルト環境)で実行</div>
+      <div class="ans-reason">割引プランは適切だが、Lambdaをプライベートサブネット内EC2へ接続する際にインターネット経由になり通信レイテンシーが最小化されない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">EC2側がパブリックエンドポイントを持ち、VPC内部通信が不要な場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「EC2とLambdaの両方のコストを削減」＋「通信レイテンシー最小」→EC2単体しか安くならないプランを除外し、Compute Savings Plans＋同一プライベートサブネットの組み合わせ</div></div>
+  </div>
+
+  <div class="mnemo-card" style="background:var(--surface);border:1px dashed var(--orange);border-radius:10px;padding:12px;margin-top:4px;">
+    <div style="color:var(--orange);font-weight:700;font-size:12px;margin-bottom:6px;">🧠 このタブの共通鉄則</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.8;">
+      「トラフィック変動＋RDB＋従量課金」＝<strong style="color:var(--green)">Aurora Serverless</strong>。<br>
+      「複数コンピュートサービス（EC2+Lambda等）を横断して割引したい」＝<strong style="color:var(--green)">Compute Savings Plans</strong>（EC2単体プランでは不十分）。
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB20: イベント駆動処理 ===== -->
+<div class="section" id="s20">
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1011</span><span class="qtheme">ドキュメントファイルの即時変換処理とコスト最適化</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">S3イベント通知でSQSキューにメッセージ送信、そのキューをイベントソースとするLambda関数で変換を実行</div>
+      <div class="ans-reason">90秒・256MBという軽量処理に対し実行時間分のみ課金のサーバーレスを選択し、SQSを挟むことで大量アップロード時のスロットリングやデータ消失を防ぐ最適設計。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ S3イベント→SQS→ECS on Fargateタスク</div>
+      <div class="ans-reason">90秒で終わる軽量な単発処理に対し、コンテナの起動オーバーヘッド（30秒〜1分）やタスク管理の維持コストがLambdaより劣る。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">1ファイルあたりの処理時間がLambda上限(15分)を大幅に超える場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ S3イベント→EventBridge→EC2 ASGで処理</div>
+      <div class="ans-reason">EC2の起動（数分）が遅延の原因になり、最低1分単位の課金やOS運用保守オーバーヘッドが発生しコスト最適化に逆行する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">数時間規模のバッチ処理でスポットインスタンスを活用したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ S3イベント→SNS→Elastic Beanstalkワーカー層</div>
+      <div class="ans-reason">Beanstalkのバックエンドは常時起動のEC2であり、アイドル時間にも無駄なコストが発生。SNSはメッセージ永続化されず信頼性にも課題。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">既存の常時稼働Beanstalk環境の余剰リソースを使いたい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「90秒・256MBの軽量処理」＋「コスト効率最優先」→常時稼働系(Beanstalk/EC2)や起動の重いFargateを除外し「Lambda+SQS」</div></div>
+  </div>
+
+  <div class="mnemo-card" style="background:var(--surface);border:1px dashed var(--orange);border-radius:10px;padding:12px;margin-top:4px;">
+    <div style="color:var(--orange);font-weight:700;font-size:12px;margin-bottom:6px;">🧠 このタブの共通鉄則</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.8;">
+      「短時間・軽量・イベント駆動・コスト最優先」の4点セットが揃ったら<strong style="color:var(--green)">Lambda</strong>一択。処理時間がLambdaの15分制限を超えるかどうかが分岐点。
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB21: 移行・バックアップ ===== -->
+<div class="section" id="s21">
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1007</span><span class="qtheme">物理テープライブラリバックアップのクラウド移行と運用継続</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">Storage GatewayのTape Gatewayをオンプレに展開し、バックアップソフトからiSCSI経由で仮想テープとして認識させS3/Glacierに保存</div>
+      <div class="ans-reason">既存のバックアップソフトウェアや運用手順を一切変更することなく、iSCSI VTLインターフェイスを介して物理テープからクラウドの仮想テープへスムーズに移行できる最適設計。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ DataSyncエージェントで定期的にGlacierへ転送</div>
+      <div class="ans-reason">DataSyncは汎用データ転送ツールでVTLインターフェイスを提供せず、既存のテープ運用手順を維持できない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">テープ運用を完全廃止し、静的データをスケジュールベースでオンライン移行したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ EFS+Direct ConnectでNFSマウントしバックアップ書き込み</div>
+      <div class="ans-reason">EFSはLinux向けNFSでVTLインターフェイスを持たずテープ運用を継続できない上、Glacierに比べGB単価が数十倍割高。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">オンプレ・AWS双方から同時マウントし超低遅延で共有更新し続けるアクティブデータが必要な場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ S3を直接バックアップ先にしS3プラグイン導入</div>
+      <div class="ans-reason">バックアップソフトへのプラグイン導入が必要になり「既存運用手順をそのまま継続」の要件を満たせない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">多少の設定変更を許容し仮想テープの概念を通さずS3オブジェクトとして直接管理したい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「運用手順はそのまま継続」＋「物理テープからの脱却」→iSCSI VTL互換の「Tape Gateway」一択</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1041</span><span class="qtheme">複数EC2インスタンスのクロスリージョンバックアップの一元管理と運用コスト最小化</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">AWS Backupでバックアップ計画を定義しEC2をリソース割り当てに追加、ターゲットリージョンへのクロスリージョンコピールールを設定</div>
+      <div class="ans-reason">フルマネージドでEC2を含む多数のサービスを一元管理でき、カスタムコードや個別スケジュール管理を排除してネイティブにクロスリージョンコピーを実現する最適設計。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ DLM+Lambdaでターゲットリージョンへコピー</div>
+      <div class="ans-reason">Lambdaのコード管理・エラーハンドリング等の運用オーバーヘッドが発生し、DLMはボリューム単位管理が基本で複数インスタンス横断の一元管理には複雑性が増す。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">AWS Backupを使わずEBSボリューム単体のライフサイクル管理に特化したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ CloudFormation StackSets + S3クロスリージョンレプリケーション</div>
+      <div class="ans-reason">CloudFormationはプロビジョニングツールでEC2のバックアップ機能自体を持たない。常時稼働インスタンスやS3同期を要し過剰かつ複雑になる。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">バックアップではなく同一構成のインフラをテンプレートから複製したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ ターゲットリージョンにスタンバイ起動+DMSで継続同期</div>
+      <div class="ans-reason">常時スタンバイ起動でコンピューティングコストが大幅増加。DMSはDB移行・同期用サービスでEC2全体のバックアップには適合しない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">コスト度外視でRDBデータをリアルタイム継続同期したい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「一元的に行い」＋「運用コスト最小限」→カスタム実装(DLM+Lambda)や過剰なサービス(StackSets/DMS)を除外し「AWS Backup」一択</div></div>
+  </div>
+
+  <div class="mnemo-card" style="background:var(--surface);border:1px dashed var(--orange);border-radius:10px;padding:12px;margin-top:4px;">
+    <div style="color:var(--orange);font-weight:700;font-size:12px;margin-bottom:6px;">🧠 このタブの共通鉄則</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.8;">
+      「既存運用を変えたくない×クラウド移行」＝<strong style="color:var(--green)">互換インターフェースを持つマネージドサービス</strong>（Tape Gateway等）。<br>
+      「複数リソースの一元バックアップ」＝<strong style="color:var(--green)">AWS Backup</strong>。自前のLambda/DMS連携は運用オーバーヘッドとして不正解になりやすい。
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB22: ASG・DB運用 ===== -->
+<div class="section" id="s22">
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1015</span><span class="qtheme">週次バッチ処理に合わせたAuto Scalingの自動化と運用負荷最小化</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">ASGで予測スケーリングを有効化しCPU使用率目標60%を指定。事前起動設定でバッチ開始30分前にキャパシティ確保</div>
+      <div class="ans-reason">過去データから機械学習モデルが需要を予測するため専任チームの見積もりが不要であり、事前起動設定で「開始30分前準備」を自動で満たせる最適設計。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ ターゲット追跡スケーリング(CPU目標60%)</div>
+      <div class="ans-reason">実際に負荷が発生してから動くリアクティブ型であり、「30分前準備」というプロアクティブな要件を満たせない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">事前プロビジョニング不要でリアルタイムのCPU使用率に追従したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ スケジュールドアクション+固定キャパシティ指定</div>
+      <div class="ans-reason">30分前の事前起動は可能だが、固定値指定のため週ごとに処理量が異なる環境では過不足が発生し、手動見積もりの運用負荷も残る。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">週ごとの処理量変動が一切なく、必要台数が完全固定で予測できる場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ CloudWatchアラーム+SSM Automationランブック</div>
+      <div class="ans-reason">負荷検知後のリアクティブな動きになり30分前準備ができない上、カスタムランブックの構築・維持の手間が最も大きい。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">標準スケーリングでは対応できない複雑なカスタム承認フローが必要な場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「週ごとに異なる処理量」＋「開始30分前準備」＋「専任チームなし」→自動見積もりと事前プロビジョニングを両立する「予測スケーリング」一択</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1016</span><span class="qtheme">OSレベルアクセスが必要なOracle DB移行と運用負荷最小化</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">RDS Custom for Oracleを利用し、基盤ホストへアクセスしてサードパーティー暗号化モジュールを導入</div>
+      <div class="ans-reason">従来のRDSの自動バックアップやパッチ管理機能を享受しつつ、OS/DB環境への特権アクセス（SSH/sysdba）を両立できるため、少人数のITチームでも最少の運用負荷で移行要件を満たせる最適設計。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ EC2にOracleをインストールし手動でモジュール構成+AWS Backup</div>
+      <div class="ans-reason">モジュール導入は可能だが、高可用性構成・パッチ適用・スケーリング等をすべて自前で行う必要があり運用負荷が過大になる。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">AWSマネージド機能を一切使わずすべてセルフ管理したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ DMSでAuroraに移行しネイティブ暗号化機能で代替</div>
+      <div class="ans-reason">異機種間移行（Oracle→Aurora）となりスキーマ・アプリコードの膨大な書き換え・検証コストが発生する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">ライセンスコスト削減のためオープンソース互換DBへの脱却を最優先する場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ RDS for Oracleマルチ AZ+オプショングループで有効化</div>
+      <div class="ans-reason">通常のRDSはOSアクセスが完全に遮断されており、オプショングループでは純正オプションしか有効化できず任意のサードパーティー製モジュールを導入できない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">OSアクセス不要でOracle純正機能のみで運用したい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「OSレベルのアクセスが必要」＝EC2と即断させる罠。マネージドの良さとOS自由度を両取りする「RDS Custom」が正解</div></div>
+  </div>
+
+  <div class="mnemo-card" style="background:var(--surface);border:1px dashed var(--orange);border-radius:10px;padding:12px;margin-top:4px;">
+    <div style="color:var(--orange);font-weight:700;font-size:12px;margin-bottom:6px;">🧠 このタブの共通鉄則</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.8;">
+      「周期性がある×事前準備が必要」＝<strong style="color:var(--green)">予測スケーリング</strong>（ターゲット追跡はリアクティブなので不適合）。<br>
+      「OSアクセスが必要」だからといって即EC2に飛びつかない。マネージド+OS自由度の両取りには<strong style="color:var(--green)">RDS Custom</strong>という選択肢がある。
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB23: 分野1追加 組織ガバナンス ===== -->
+<div class="section" id="s23">
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qtheme">AWS OrganizationsのOU・アカウント配置変更の最小工数でのリアルタイム検知</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">AWS Control Towerのランディングゾーンを構成しドリフト検出機能で検知・通知</div>
+      <div class="ans-reason">組み込みマネージド機能により追加開発なしでリアルタイム通知と最小管理工数を実現する。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ CloudTrail組織証跡+Athenaの定期クエリで検出</div>
+      <div class="ans-reason">定期クエリによるバッチ処理のためリアルタイム性に欠け、パイプライン構築の管理工数も増大する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">リアルタイム検知が不要で過去ログを安価に長期保管・分析する要件なら正解</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ EventBridge+Lambda解析+SESでメール通知</div>
+      <div class="ans-reason">リアルタイム検知は可能だが、Lambdaコード開発やSES構築・保守などの運用オーバーヘッドが不適切。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">独自フォーマット加工や特定サードパーティ連携が必要な場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Configマルチアカウントアグリゲータ+CloudWatchアラーム</div>
+      <div class="ans-reason">カスタムルールの開発が必要となり、マネージド機能（Control Tower）より管理工数が大きい。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">Control Tower未導入環境で標準的なConfig運用を行いたい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「最小限の管理工数」＋「リアルタイム検知」→EventBridge+Lambda等のカスタム開発に惑わされず、マネージドな「Control Towerのドリフト検出」を選ぶ</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qtheme">マルチアカウントにおけるチーム別サービス利用の予防的制限</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">AWS OrganizationsでOUを構成しSCPをアタッチして統制</div>
+      <div class="ans-reason">API実行時点で事前ブロック（予防的制御）でき、一括適用で管理の手間を最小化できる。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ 各アカウントのIAMポリシーに個別記述</div>
+      <div class="ans-reason">アカウント・ユーザーごとの個別管理運用が発生し手間が肥大化する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">単一アカウント内の特定ユーザー・ロールのみに個別制御を行う場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Configマネージドルール+自動修復アクションで停止</div>
+      <div class="ans-reason">事後検出（発見的制御）のため一時的な違反実行を予防できず、修復のタイムラグが発生する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">違反リソースを自動検出し事後に是正・監査レポート化したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Control Tower+Service Catalogポートフォリオで限定</div>
+      <div class="ans-reason">プロビジョニング経路の限定のみでマネジメントコンソールやCLIからの直接操作を予防制限できない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">承認済みIaCテンプレートのみをセルフサービス提供したい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「管理の手間最小化」＋「サービス利用制限」→個別IAM設定や事後検出のConfigではなく、OU単位で予防的ガードレールを貼る「SCP」一択</div></div>
+  </div>
+
+  <div class="mnemo-card" style="background:var(--surface);border:1px dashed var(--purple);border-radius:10px;padding:12px;margin-top:4px;">
+    <div style="color:var(--purple);font-weight:700;font-size:12px;margin-bottom:6px;">🧠 このタブの共通鉄則</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.8;">
+      組織全体の統制は<strong style="color:var(--green)">SCP（予防的）</strong>が基本。カスタム検知・通知構成（EventBridge+Lambda等）が出てきたら、まず<strong style="color:var(--green)">Control Tower</strong>等のマネージド機能で代替できないか疑う。
+    </div>
+  </div>
+</div>
+
+<!-- ===== TAB24: 分野1追加 特殊アクセス制御 ===== -->
+<div class="section" id="s24">
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qtheme">大規模DDoS攻撃に対するAWS専門チームによるプロアクティブ対応支援</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">AWS Shield Advancedを有効化しALBとRoute 53を保護対象に登録</div>
+      <div class="ans-reason">SRT（Shield Response Team）によるプロアクティブなエンゲージメントと高度なDDoS緩和を利用可能。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ ALBにWAFを関連付けレートベースルールを設定</div>
+      <div class="ans-reason">L7攻撃のみ対応でL3/L4 DDoSには不十分であり、専門チーム支援も含まれない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">単一IPからのL7 HTTPフラッド攻撃を自動ブロックしたい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ GuardDuty有効化+VPCフローログ分析+EventBridgeで自動修復</div>
+      <div class="ans-reason">脅威検出・分析サービスでありリアルタイムのDDoS自動緩和やSRT支援は提供されない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">不正アクセス等のセキュリティ脅威の自動検出・修復フローを構築したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ CloudWatchカスタムメトリクス+LambdaでSGルール自動更新</div>
+      <div class="ans-reason">自前構築が必要で管理オーバーヘッドが大きく、大規模DDoSの直接緩和には不向き。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">独自メトリクス異常検知でSG等を自動変更するカスタム運用の場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「AWSの専門チームによるプロアクティブ対応支援」→WAFやGuardDutyではなく「Shield Advanced」のSRT一択</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qtheme">EKSにおけるPod単位でのIAMアクセス制御（IRSA）の設定</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">OIDCプロバイダーをIAMに登録し、サービスアカウントのアノテーションにIAMロールARNを指定する</div>
+      <div class="ans-reason">Pod単位で最小権限の一時認証情報を割り当てるための必須手順（IRSA）。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ ワーカーノードのEC2インスタンスプロファイルに全権限を付与</div>
+      <div class="ans-reason">ノード上の全Podで権限が共有されてしまい、Podごとの最小権限に反する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">クラスター内の全Podが共通権限で十分な簡易構成の場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ コントロールプレーン用IAMロールにポリシー追加+RBAC同期</div>
+      <div class="ans-reason">コントロールプレーン用ロールはクラスター自体の管理用であり、PodのAWS API呼び出しには使用できない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">EKSコントロールプレーンがAWSリソースを操作・プロビジョニングする権限を付与する場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ IAM Access AnalyzerでPodのネットワークトラフィックを分析しブロック</div>
+      <div class="ans-reason">権限付与の仕組みではなく、アクセスの分析・特定を行うサービス。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">未利用権限の特定や外部共有リソースのアクセス監査を行う場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「Pod単位でAWS API認可を分離」→ワーカーノードやコントロールプレーンレベルではなく「OIDCプロバイダー登録＋サービスアカウントへのアノテーション」の組み合わせ</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qtheme">IAMを活用したAmazon EFSの書き込み・削除防止（読み取り専用制御）</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">EFSファイルシステムポリシーでIAMロールからのelasticfilesystem:ClientWriteをDenyに設定</div>
+      <div class="ans-reason">リソースベースポリシーの明示的なDenyにより、データの書き換えや削除をEFS側で確実にブロックする。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ IAMロールにClientMountのみをAllowするインラインポリシー</div>
+      <div class="ans-reason">暗黙的な拒否のみで明示的Denyがなく、IAM認証なしのNFSマウントで回避される恐れがある。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">ClientWriteへの明示的Denyを追加しIAM認証付きマウントを強制できる場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ EFSアクセスポイント+POSIXのUID/GIDを読み取り専用に設定</div>
+      <div class="ans-reason">OSレベルのPOSIX権限制御であり「IAMを活用した制御」という要件を満たさない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">IAMを使わずLinuxユーザーのUID/GIDベースで制限したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ EC2側でmountコマンドに-o roオプションを指定</div>
+      <div class="ans-reason">クライアント側の設定に過ぎず、管理者権限で再マウント(-o rw)することで容易に回避される。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">誤操作防止レベルの簡易的な読み取り専用マウントで十分な場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「IAMを活用した制御」＋「書き込み・削除の防止」→OS側のマウントオプションやPOSIX権限ではなく、EFS側のファイルシステムポリシーで「ClientWrite」を「Deny」</div></div>
+  </div>
+
+  <div class="mnemo-card" style="background:var(--surface);border:1px dashed var(--purple);border-radius:10px;padding:12px;margin-top:4px;">
+    <div style="color:var(--purple);font-weight:700;font-size:12px;margin-bottom:6px;">🧠 このタブの共通鉄則</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.8;">
+      「AWS専門チームの支援」＝<strong style="color:var(--green)">Shield Advanced (SRT)</strong>。WAF/GuardDutyは自動検知・緩和はできても専門チーム支援は含まれない。<br>
+      EKSのPod単位認可は<strong style="color:var(--green)">IRSA（OIDC+サービスアカウント）</strong>。EFSの書き込み禁止は<strong style="color:var(--green)">ファイルシステムポリシーでClientWriteをDeny</strong>、OS側の設定は回避可能な点に注意。
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<!-- ===== TAB26: 分野1追加2 ネットワーク詳細 ===== -->
+<div class="section" id="s26">
+<div class="content" style="padding:0;">
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qtheme">SQSへのインターネット非経由（プライベート）接続</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">プライベートサブネットにSQS用インターフェイスVPCエンドポイントを作成しSGを設定</div>
+      <div class="ans-reason">PrivateLink（ENI）経由でAWS網内で通信を完結させる。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ ゲートウェイVPCエンドポイントをルートテーブルに追加</div>
+      <div class="ans-reason">ゲートウェイ型はS3とDynamoDBのみ対応でSQSは非対応。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">接続先がS3またはDynamoDBの場合なら正解</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ NATゲートウェイ+SQSアクセスポリシーでVPC CIDR許可</div>
+      <div class="ans-reason">NATゲートウェイ経由の通信はパブリックインターネットを経由する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">外部SaaSなど一般的なパブリックエンドポイントへ送信する場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ インターフェイスVPCエンドポイントをパブリックサブネットに作成</div>
+      <div class="ans-reason">プライベートサブネットからの接続にパブリックサブネット配置は不適切かつ冗長。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">アクセス元と同じプライベートサブネットに作成するのが正しい構成</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「ゲートウェイ型」と「インターフェイス型」の対応サービス差。S3/DynamoDB以外の閉域接続はすべてインターフェイス型（PrivateLink）</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qtheme">低レイテンシー・WAF保護・固定IP要求を満たすマルチリージョンWeb構成</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">Global AcceleratorでエニーキャストIPを取得しALBを登録、ALBにWAFをアタッチ</div>
+      <div class="ans-reason">2つの静的IPでの単一窓口化、バックボーン経由の低遅延化、L7脅威検知を同時達成する。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Global Accelerator+NLB+WAF構成</div>
+      <div class="ans-reason">NLBはL4ロードバランサーのためWAFの直接関連付けが技術的に不可能。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">WAF保護不要で超高スループット・極小レイテンシーが求められる場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ NLB+EIP+Route53加重ルーティング+Shield Advanced</div>
+      <div class="ans-reason">NLBはWAF非対応で加重ルーティングは低遅延化にならず、単一固定IPも提供不能。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">トラフィック割合固定分散とL3/L4 DDoS防御に特化する場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ CloudFront+ALB+WAF+Route53レイテンシー構成</div>
+      <div class="ans-reason">静的固定IPアドレスを提供できず、IP許可リスト要件に反する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">IP固定要件がなく静的コンテンツのCDNキャッシュ最適化が主目的の場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「固定IP」＋「WAF」の両立→CloudFrontは固定IP不可、NLBはWAF不可。どちらも満たせる「Global Accelerator＋ALB」</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qtheme">プライベートサブネットから外部APIへのセキュアかつ低運用負荷な接続</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">NATゲートウェイをパブリックサブネットに作成しプライベートサブネットのルートに設定</div>
+      <div class="ans-reason">フルマネージドでインバウンドを遮断しつつ運用負荷最小でアウトバウンド通信を実現する。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ NATインスタンスを起動しソース/デスティネーションチェックを無効化</div>
+      <div class="ans-reason">OSパッチ適用や高可用性設計などの運用管理負担が発生し不適切。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">超低コスト優先で自前運用を許容する場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ IGWへのルート追加+EIP直接割り当て</div>
+      <div class="ans-reason">インターネットからの直接アクセスが可能になりプライベートサブネットの保護要件に反する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">パブリックWebサーバー等を直接外部公開する場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Site-to-Site VPN+オンプレプロキシ経由で転送</div>
+      <div class="ans-reason">不要な迂回経路とオンプレインフラへの依存で運用負荷が高い。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">全通信をオンプレのセキュリティ機器でインスペクションする規制要件の場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「管理負担を最小限」→自前管理のNATインスタンスではなく、マネージドな「NATゲートウェイ」</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qtheme">悪意ある特定IPアドレスからの通信の即座ブロック</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">ALBが配置されたパブリックサブネットのNACLに優先度の高い拒否ルールを追加</div>
+      <div class="ans-reason">ステートレスで拒否ルールに対応するNACLを用い、ALB到達前に即座遮断する最善手。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ SGに特定IPの拒否ルールを追加</div>
+      <div class="ans-reason">セキュリティグループは許可ルールのみ対応で明示的な拒否設定が不可能。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">許可対象IP（ホワイトリスト）のみを指定する要件なら正解</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ バックエンドEC2側プライベートサブネットのNACLに拒否ルール</div>
+      <div class="ans-reason">ALB通過後の通信は送信元IPがALBのプライベートIPに変換されているため、クライアントIP指定の拒否は不可能。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">ALBや特定内部サブネットからの通信自体を遮断したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ WAF+CloudFrontを新規作成して前段に配置</div>
+      <div class="ans-reason">新規インフラ構築とDNS切り替えを伴うため「即座にブロック」する迅速性に反する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">恒久対策として地理的制限や高度なL7保護を導入したい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「即座にブロック」＋「SGでの拒否」→SGに拒否ルールは存在せず、クライアントIPを直接保持するパブリックサブネット側の「NACL」で拒否</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1144</span><span class="qtheme">3層Webアーキテクチャにおける最小権限のネットワークアクセス制御</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">ALBのSG IDをソースとしてAPP層443を許可、APP層のSG IDをソースとしてDB層3306を許可（SG参照チェーン）</div>
+      <div class="ans-reason">SGの参照チェーンを利用することで、IPアドレス指定ではなくリソース単位で厳格かつ動的に最小権限のアクセス制御を実現する。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ 0.0.0.0/0からの443インバウンド許可</div>
+      <div class="ans-reason">プライベート配置であっても0.0.0.0/0の許可は過剰アクセスであり最小権限の原則に反する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">APサーバーがALBを介さずインターネットから直接トラフィックを受ける構成なら正解</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ サブネットCIDRからのインバウンドをNACLで許可</div>
+      <div class="ans-reason">サブネット内のすべてのIPに対し一律許可となり、特定SGに絞り込む高精度な制御ができない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">サブネット単位の粗いトラフィック遮断で十分な場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ VPC全体のCIDRから3306インバウンド許可</div>
+      <div class="ans-reason">VPC内の無関係なインスタンスからもDBアクセスが可能になり最小限の許可設定にならない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">簡易的なデモ・テスト環境構築の場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「サブネットCIDR指定」と「SG ID参照」→前段のSG IDを直接ソースに指定することでASG等のIP変動にも自動追従する</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1145</span><span class="qtheme">AWS上のサードパーティーSaaSへのインターネット非経由接続</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">決済プロバイダーが公開するVPCエンドポイントサービスに対し、PrivateLink経由のインターフェイスVPCエンドポイントを作成</div>
+      <div class="ans-reason">パブリックインターネットにトラフィックを晒すことなく、AWS内部バックボーンのみを経由して安全かつ最小限の運用負荷でSaaSに接続できる。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Site-to-Site VPNトンネルを構築</div>
+      <div class="ans-reason">通信は暗号化されるがパブリックインターネットを経由し、IPsecトンネル管理の運用負荷も高い。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">オンプレ拠点やその他自社拠点とVPC間を暗号化接続する場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Transit Gatewayを中央ハブとして配置</div>
+      <div class="ans-reason">TGWは自社管理の複数VPCやオンプレを束ねる構成であり、サードパーティSaaSとの接続には構成が過剰。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">社内の多数VPC・オンプレ拠点を中央ハブで一元管理したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ NATゲートウェイ+SGで決済サービスIP範囲のみ許可</div>
+      <div class="ans-reason">NATゲートウェイ経由の通信はパブリックインターネットを通過するため「非経由」の要件を満たさない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">一般的なパブリックAPIへアウトバウンド通信を行う場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「サードパーティSaaSへのインターネット非経由接続」→特定サービスのみをピンポイントで呼ぶ「PrivateLink」一択。TGWやVPNはネットワーク全体を繋ぐため過剰</div></div>
+  </div>
+
+  <div class="mnemo-card" style="background:var(--surface);border:1px dashed var(--purple);border-radius:10px;padding:12px;margin-top:4px;">
+    <div style="color:var(--purple);font-weight:700;font-size:12px;margin-bottom:6px;">🧠 このタブの共通鉄則</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.8;">
+      閉域接続は「S3/DynamoDB→ゲートウェイ型」「それ以外(SQS/SNS/SaaS等)→インターフェイス型(PrivateLink)」で完全に分岐する。<br>
+      「固定IP＋WAF」の両立要件は<strong style="color:var(--green)">Global Accelerator＋ALB</strong>の組み合わせでしか満たせない（CloudFrontは固定IP不可、NLBはWAF不可）。<br>
+      SGは拒否ルールを持たないため「即座にブロック」系は必ず<strong style="color:var(--green)">NACL</strong>を使う。
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ===== TAB27: 分野1追加2 監視・SSO ===== -->
+<div class="section" id="s27">
+<div class="content" style="padding:0;">
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1146</span><span class="qtheme">高度なDDoS保護とリアルタイム可視化・自動緩和</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">Shield Advancedのサブスクリプションを開始し、ALBを保護リソースとして登録</div>
+      <div class="ans-reason">実際にトラフィックが通過するリソースでL7 DDoS攻撃のリアルタイム検出と自動緩和を実現する。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ GuardDuty有効化+VPCフローログ自動分析</div>
+      <div class="ans-reason">脅威の検出のみでDDoSの自動緩和（防御）機能を持たない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">悪意あるアクティビティの自動検知・アラート通知が目的の場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Inspectorのネットワーク到達可能性分析を実行</div>
+      <div class="ans-reason">設定ミスや脆弱性を評価する静的ツールでありリアルタイムのDDoS防御は不可能。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">OS・ミドルウェアの脆弱性や不要ポート開放をチェックする場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Shield Advanced+Route53ホストゾーンを登録</div>
+      <div class="ans-reason">DNSが外部管理のため対象リソースが存在せず、ALBも保護されない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">Route53管理のDNSホストゾーンがありDNSフラッド対策が必要な場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「DNSは外部プロバイダーで管理」→Shield Advanced自体は正解サービスだが、存在しないRoute53ではなく実際にトラフィックが通る「ALB」を登録</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1152</span><span class="qtheme">Webアプリ(ALB)へのSQLインジェクション対策</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">WAFのウェブACLにSQLインジェクション検出ルールを含めALBと関連付ける</div>
+      <div class="ans-reason">マネージドルールにより運用負荷最小で、アプリ到達前にリクエストをインラインでフィルタリング・自動ブロックする。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Shield AdvancedをALBに適用しDDoSレスポンスチームと連携</div>
+      <div class="ans-reason">目的がDDoS攻撃の保護・緩和であり、L7のSQLインジェクション検知・遮断には適さない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">大規模L3/L4/L7 DDoSに対する高度な緩和や専門チーム支援が必要な場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ GuardDuty有効化+SNS通知+手動ブロック</div>
+      <div class="ans-reason">脅威の事後検知・通知サービスであり、リアルタイムな自動遮断ができず運用負荷も大きい。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">不正な挙動を継続的に検知し管理者へアラート通知する場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Inspectorで脆弱性評価を定期実行+パッチ自動適用</div>
+      <div class="ans-reason">OS・ミドルウェアの静的な脆弱性スキャンツールであり、実行中の通信の検査・遮断は不可能。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">既知のOS/パッケージ脆弱性(CVE)を定期スキャン・監査する場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「SQLインジェクション対策」＋「最小限の運用オーバーヘッド」→事後検知(GuardDuty)や脆弱性診断(Inspector)ではなく、到達前に直接遮断する「WAF」</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1153</span><span class="qtheme">複数アカウントのセキュリティログ統合管理と標準化</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">Amazon Security Lakeを有効化し対象アカウントをソースとして登録する</div>
+      <div class="ans-reason">開発不要でOCSF規格への自動正規化とS3への一元集約をマネージドで実現する。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Glue+Lake Formation構成</div>
+      <div class="ans-reason">ログ変換やOCSF正規化用のETLパイプラインを自前開発する必要があり運用負荷が大きい。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">セキュリティ特化ではない一般的な業務データレイクの構築が目的の場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Kinesis Firehose+Redshift+QuickSight構成</div>
+      <div class="ans-reason">リアルタイム分析基盤としては有効だが、正規化ロジック開発が必要で構成も過剰。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">DWHでの複雑な集計クエリ・BI可視化が主目的の場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ CloudWatch Logs+Lambda+OpenSearch構成</div>
+      <div class="ans-reason">各アカウントの設定やLambdaコード開発・OpenSearch運用コストが高い。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">独自基盤でログのリアルタイム全文検索・可視化を行いたい場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「標準化されたスキーマ(OCSF)」＋「カスタム開発を最小限」→自前ETLを避け、組み込みでOCSF正規化に対応する「Security Lake」</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1162</span><span class="qtag2">2つ選択</span><span class="qtheme">社内ADと連携した全AWSアカウントへのSSOと一元管理</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解（2つ）</div>
+      <div class="ans-main">① Organizationsで全機能有効の組織を構成し部門ごとのアカウントを配下に作成<br>② IAM Identity Centerを組織レベルで有効化し社内ADをアイデンティティソースとして接続</div>
+      <div class="ans-reason">Organizationsによるマルチアカウント統合を前提基盤とし、IAM Identity Centerで社内ADと連携した一元的なSSOを実現する。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ CloudFormation StackSetsで各アカウントにIAM IdP+ロールを個別デプロイ</div>
+      <div class="ans-reason">アカウント追加ごとに個別管理が発生し、一元的なSSO制御の要件を満たさない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">Organizationsを使わず少数アカウントに個別SAML連携を維持したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Cognitoユーザープール+SAMLフェデレーションでIAMロール認証を委任</div>
+      <div class="ans-reason">Cognitoは独自Web/モバイルアプリのユーザー認証用であり、マネジメントコンソールへのSSOには不適。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">自作アプリに社内AD(SAML)ログイン認証を統合したい場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Managed Microsoft AD+IAMポリシーへ直接LDAP認証を適用</div>
+      <div class="ans-reason">IAMはLDAP認証に直接対応しておらず技術的に不可能。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">Windows ServerワークロードをAWS上でドメイン参加させる場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「社内Active Directory」＋「Cognito/IAMへの直接LDAP」→組織横断SSOはCognitoでなく「IAM Identity Center」。IAMへのLDAP直接認証は技術的に不可能</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qid">SAA-1165</span><span class="qtheme">組織全体でのコスト配分タグ変更の事前防止と一元制御</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">SCPで指定したIAMロール以外からのtag操作APIをDeny条件付きで拒否</div>
+      <div class="ans-reason">組織全体に予防的ガードレールを一括適用し、最小の運用オーバーヘッドでAPI実行前に即時遮断する。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Configマネージドルール+SSM Automationで自動修復</div>
+      <div class="ans-reason">事後検出・自動修復の仕組みであり、変更自体の事前予防にならずタイムラグが発生する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">変更をブロックせず非準拠リソースを検出・通知する監査要件の場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ EventBridgeで検知+Lambdaで元のタグ値にロールバック</div>
+      <div class="ans-reason">イベント発生後の事後対応フローであり、複数コンポーネントの構築・管理が必要で運用負荷が大きい。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">タグ変更時に他システムへ通知するカスタムワークフローが必要な場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ 各アカウントのIAMポリシーにタグ変更拒否インラインポリシーを個別追加</div>
+      <div class="ans-reason">アカウント追加ごとに個別管理が発生し、アカウント管理者によってポリシー変更で回避されるリスクがある。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">Organizationsを使わず特定アカウント内の個別ユーザーに限定する場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「組織全体に適用」＋「予防的制御」→アカウント管理者に迂回されない一元的ガードレールは「SCP（Deny条件付き）」</div></div>
+  </div>
+
+  <div class="mnemo-card" style="background:var(--surface);border:1px dashed var(--purple);border-radius:10px;padding:12px;margin-top:4px;">
+    <div style="color:var(--purple);font-weight:700;font-size:12px;margin-bottom:6px;">🧠 このタブの共通鉄則</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.8;">
+      DDoS＝<strong style="color:var(--green)">Shield Advanced</strong>、SQLi等のL7攻撃＝<strong style="color:var(--green)">WAF</strong>、脅威検出のみ（緩和なし）＝GuardDuty、と用途で完全に切り分ける。<br>
+      組織横断SSOは<strong style="color:var(--green)">IAM Identity Center</strong>（Cognitoはアプリ向けなので不適）。予防的なタグ・サービス制限は<strong style="color:var(--green)">SCP</strong>が定番。
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ===== TAB28: 分野1追加2 DB・特殊運用 ===== -->
+<div class="section" id="s28">
+<div class="content" style="padding:0;">
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qtheme">EKSクラスター内部シークレット（etcd）の暗号化</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">カスタマーマネージドKMSキーを指定しEKSのエンベロープ暗号化を有効化</div>
+      <div class="ans-reason">追加管理なしでetcd上のKubernetes Secretを保管時自動暗号化する。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Secrets Managerに格納しExternal Secrets Operatorで参照</div>
+      <div class="ans-reason">外部管理には有用だがKubernetes標準のetcd上のSecret自体の暗号化要件を満たさない。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">アプリ認証情報をKMS連携で中央一元管理・自動ローテーションする場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ EBSボリューム暗号化を有効化しワーカーノードを保護</div>
+      <div class="ans-reason">EBS暗号化はデータノード用であり、AWS管理のコントロールプレーン（etcd）の暗号化には無関係。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">EC2ワーカーノードのローカルデータやログの物理ディスク保護が目的の場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ HashiCorp VaultをデプロイしS3バックエンドで暗号化</div>
+      <div class="ans-reason">独自の外部クラスタ管理が発生し「運用オーバーヘッド最小化」に反する。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">AWS非依存のマルチクラウド共通シークレット基盤を導入する場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「Kubernetesクラスター内部のシークレット(etcd)」＋「運用オーバーヘッド最小化」→外部参照構成ではなくEKS組み込みの「KMSエンベロープ暗号化」</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qtheme">EMRでのジョブ単位のIAMアクセス制御とIMDSブロック</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">EMRランタイムロールの定義・有効化とジョブ指定実行</div>
+      <div class="ans-reason">EMRランタイムロールによりジョブ単位の権限分離とIMDS通信の自動遮断（iptables設定）を最小オーバーヘッドで実現する。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ 全権限を統合したインスタンスプロファイル+手動iptablesブロック</div>
+      <div class="ans-reason">共有プロファイルでは最小権限原則を違反し、手動スクリプト管理も高負荷。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">クラスター全体で権限が一律で良く個別ジョブの権限分離が不要な場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Lake Formation統合+IMDSアクセス許可</div>
+      <div class="ans-reason">Lake Formationはデータカタログ限定制御で他AWSサービスに対応できず、IMDS許可も要件違反。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">対象がS3データレイクのみでテーブル・カラム単位の制御が要件の場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ サブネット別NACLによるIMDS拒否</div>
+      <div class="ans-reason">リンクローカルアドレス(169.254.169.254)通信はNACLを通過しないため遮断不可能。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">異VPC・オンプレ間などの境界ネットワーク通信をサブネット単位で拒否する場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「最小限の運用オーバーヘッド」→手動iptablesやNACL設定ではなくマネージドな「EMRランタイムロール」</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qtheme">RDSの保存時・転送時暗号化と管理負荷最小化</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">RDSのKMS暗号化 + RDS CA証明書によるSSL/TLS接続</div>
+      <div class="ans-reason">追加インフラ不要でマネージド機能のみで保存時・転送時の暗号化を両立する。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ CloudHSMクラスターの構築</div>
+      <div class="ans-reason">専用ハードウェア運用が必要でコスト・管理負荷が過大。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">FIPS 140-2 Level 3適合や鍵の完全単独管理が厳格に要求される場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Encryption SDKでのアプリ側暗号化+PrivateLink</div>
+      <div class="ans-reason">アプリのコード改修が必要な上、RDSはPrivateLink接続に非対応。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">格納前にクライアント側でフィールド単位の暗号化が必須な場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ RDSのKMS暗号化+Site-to-Site VPN</div>
+      <div class="ans-reason">AWS内部通信（EC2-RDS間）にVPNを設定するのは過剰で運用負荷増。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">オンプレ環境とAWS VPC間を暗号化接続する場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「管理負荷を最小化」→CloudHSMやVPN等の追加インフラ・改修を伴う選択肢を排除</div></div>
+  </div>
+
+  <div class="qcard">
+    <div class="qcard-head"><span class="qtheme">RDS DB接続情報の安全管理と自動ローテーション</span></div>
+    <div class="ans-block ans-correct">
+      <div class="ans-lbl">◎ 正解</div>
+      <div class="ans-main">Secrets Managerのシークレット登録と標準自動ローテーション設定</div>
+      <div class="ans-reason">DB認証情報の保管からビルトイン機能による自動更新まで開発負担なしで実現する。</div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Secrets Manager+Step Functionsによるローテーション自作</div>
+      <div class="ans-reason">ビルトイン機能があるため独自のオーケストレーション構築は冗長で負担増。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">複数システムを跨ぐ特殊な順序制御が必要な場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ KMS+S3格納+KMSキー自動ローテーション</div>
+      <div class="ans-reason">KMSローテーションは暗号化キー自身の更新でありDBパスワードの変更処理は不可能。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">S3上の設定ファイル全体をKMSで保護しキー自体を年次更新する場合</span></div>
+    </div>
+    <div class="ans-block ans-wrong">
+      <div class="ans-lbl">✗ Parameter Store+EventBridge+Lambda自作</div>
+      <div class="ans-reason">パスワード更新用Lambdaコードや定期実行ルールを自作・管理する必要があり開発負担が大きい。</div>
+      <div class="cond-box"><span class="cond-lbl">正解化条件</span><span class="cond-text">コスト最優先で自作ローテーション管理を受け入れる場合</span></div>
+    </div>
+    <div class="trap-box"><div class="trap-lbl">⚠ ひっかけキーワード</div><div class="trap-text">「開発チームの負担を最小限」→自作コード・ワークフロー構築を排除し、マネージドのビルトインローテーションを持つ「Secrets Manager」</div></div>
+  </div>
+
+  <div class="mnemo-card" style="background:var(--surface);border:1px dashed var(--purple);border-radius:10px;padding:12px;margin-top:4px;">
+    <div style="color:var(--purple);font-weight:700;font-size:12px;margin-bottom:6px;">🧠 このタブの共通鉄則</div>
+    <div style="font-size:12px;color:var(--text);line-height:1.8;">
+      各サービスの「組み込みマネージド機能」を優先する原則がここでも一貫している：EKSは<strong style="color:var(--green)">エンベロープ暗号化</strong>、EMRは<strong style="color:var(--green)">ランタイムロール</strong>、RDS認証情報は<strong style="color:var(--green)">Secrets Manager標準ローテーション</strong>。<br>
+      「自作Lambda」「Step Functions」「手動iptables」など、カスタム実装が出てきたら、まず組み込み機能で代替できないか確認する。
+    </div>
+  </div>
+
+</div>
+</div>
+
+<div class="footer">
+  <span class="cheer">🧩 SAA分野1(12+14+17=43)+分野2(10)+分野3(10)+分野4(10問) 収録済み（計73問）</span>
+  今後は既存タブへの追記が中心になります
+</div>
+<script>
+  function st(i){
+    document.querySelectorAll('.section').forEach((s,j)=>s.classList.toggle('active',i===j));
+    document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('active',i===j));
+    window.scrollTo({top:document.querySelector('.header').offsetHeight,behavior:'smooth'});
+  }
+</script>
+</body>
+</html>
